@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Text?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" styleClass="main_menu_container" stylesheets="@../../Styles/ClientMenu.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Client.ClientMenuController">
+   <children>
+      <AnchorPane prefHeight="707.0" prefWidth="260.0" styleClass="left_container">
+         <children>
+            <VBox layoutX="1.0" prefHeight="80.0" prefWidth="160.0" styleClass="title_container" stylesheets="@../../Styles/ClientMenu.css" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+               <children>
+                  <ImageView fitHeight="45.0" fitWidth="45.0">
+                     <image>
+                        <Image url="@../../Images/logo_wealthwise-modified.png" />
+                     </image>
+                  </ImageView>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Wealth Wise" />
+               </children>
+            </VBox>
+            <VBox layoutX="14.0" layoutY="107.0" prefHeight="400.0" prefWidth="160.0" styleClass="menu_container" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="16.400000000000006" AnchorPane.topAnchor="107.0">
+               <children>
+                  <Button id="dashboard_btn" fx:id="dashboard_btn" mnemonicParsing="false" prefHeight="55.0" prefWidth="138.0" styleClass="Button" text="Dashboard">
+                     <graphic>
+                        <ImageView fitHeight="19.0" fitWidth="19.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/dashboard.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="transaction_btn" mnemonicParsing="false" prefHeight="31.0" prefWidth="108.0" text="Transaction">
+                     <graphic>
+                        <ImageView fitHeight="19.0" fitWidth="19.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/transaction.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="account_btn" mnemonicParsing="false" text="Accounts">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/Accounts.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="investment_btn" mnemonicParsing="false" text="Investments">
+                     <graphic>
+                        <ImageView fitHeight="19.0" fitWidth="19.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/investmentprofit.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Line endX="190.0" styleClass="left_container" />
+                  <Button id=".button_under" fx:id="profile_btn" mnemonicParsing="false" prefHeight="38.0" prefWidth="87.0" stylesheets="@../../Styles/ClientMenu.css" text="Profile">
+                     <graphic>
+                        <ImageView fitHeight="21.0" fitWidth="21.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/profile-user.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button id=".button_under" fx:id="logout_btn" minHeight="18.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="193.0" stylesheets="@../../Styles/ClientMenu.css" text="Logout">
+                     <graphic>
+                        <ImageView id=".button_under" fitHeight="21.0" fitWidth="21.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/logout.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox layoutX="9.0" layoutY="547.0" prefHeight="142.0" prefWidth="239.0" styleClass="report_suggestion_container" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="9.0" AnchorPane.rightAnchor="9.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Report Suggestions/bug  ?" />
+                  <Label fx:id="Report" styleClass="report_suggestion_containerText1" text="       Use this to report any errors or   suggestions." textAlignment="CENTER" />
+                  <Button fx:id="report_btn" mnemonicParsing="false" prefHeight="29.0" prefWidth="176.0" text="Report">
+                     <graphic>
+                        <ImageView fitHeight="18.0" fitWidth="17.0" styleClass="icon">
+                           <image>
+                              <Image url="@../../Images/reporticon.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</VBox>
