@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="850.0" styleClass="root" stylesheets="@../../Styles/Budget.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Client.BudgetController">
+   <children>
+      <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="550.0" prefWidth="850.0" styleClass="inner_container" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="Budget Management" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
+            <Label layoutX="20.0" layoutY="75.0" text="Create and manage your budgets here." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="75.0" />
+            <ListView fx:id="budget_list" layoutX="36.0" layoutY="132.0" prefHeight="387.0" prefWidth="524.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="132.0" />
+            <VBox fx:id="set" layoutX="586.0" layoutY="52.0" prefHeight="214.0" prefWidth="166.0" AnchorPane.bottomAnchor="463.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="52.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stitle" text="Set new Budget" textAlignment="JUSTIFY" />
+                  <Label fx:id="Category" text="Category">
+                     <VBox.margin>
+                        <Insets bottom="6.0" top="6.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="category_budget" />
+                  <Label fx:id="Amount" layoutX="10.0" layoutY="54.0" text="Amount">
+                     <VBox.margin>
+                        <Insets bottom="6.0" top="6.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="amount_budget" layoutX="10.0" layoutY="72.0" />
+                  <Button fx:id="create_budget_btn" prefHeight="26.0" prefWidth="135.0" text="Create Budget">
+                     <VBox.margin>
+                        <Insets top="6.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+            <VBox fx:id="delete" layoutX="586.0" layoutY="520.0" prefHeight="115.0" prefWidth="166.0" AnchorPane.rightAnchor="60.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stitle" text="Delete Budget" textAlignment="JUSTIFY">
+                     <VBox.margin>
+                        <Insets bottom="6.0" top="6.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Label fx:id="Category1" text="Category" />
+                  <TextField fx:id="delete_category">
+                     <VBox.margin>
+                        <Insets bottom="6.0" top="6.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button fx:id="delete_btn" prefHeight="26.0" prefWidth="129.0" text="Delete Budget" />
+               </children>
+            </VBox>
+            <VBox fx:id="change" layoutX="586.0" layoutY="300.0" prefHeight="150.0" prefWidth="166.0" AnchorPane.rightAnchor="60.0">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stitle" text="Change Budget" textAlignment="JUSTIFY">
+                     <VBox.margin>
+                        <Insets bottom="6.0" />
+                     </VBox.margin>
+                  </Text>
+                  <Label fx:id="Category11" text="Category">
+                     <VBox.margin>
+                        <Insets bottom="6.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TextField fx:id="change_budget" />
+                  <Label fx:id="Amount11" layoutX="10.0" layoutY="54.0" text="Amount" />
+                  <TextField fx:id="change_amount" layoutX="10.0" layoutY="72.0">
+                     <VBox.margin>
+                        <Insets top="6.0" />
+                     </VBox.margin>
+                  </TextField>
+                  <Button fx:id="change_btn" prefHeight="26.0" prefWidth="137.0" text="Change  Budget">
+                     <VBox.margin>
+                        <Insets top="6.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
