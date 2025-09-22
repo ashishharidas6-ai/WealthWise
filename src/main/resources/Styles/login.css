@@ -1,0 +1,90 @@
+.logincontainer{
+    -fx-background-color: #f0f0f0;
+    
+    -fx-border-width: 2px;
+   
+    -fx-background-radius: 10px;
+}
+
+
+.login_logo_container{
+    -fx-background-color: #c6f1f6;
+    -fx-border-color: #000000;
+    -fx-border-width: 0px;
+    
+}
+.login_logo_container Text{
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+
+.login_logo_container FontAwesomeIconView{
+    -fx-fill: #8ac7cc;
+    fill: #8ac7cc;
+}
+/* account selector choice box */
+.account_selector{
+    -fx-background-color: #9dcde1;
+    -fx-border-color: #000000;
+    -fx-border-width: 0px;
+    
+}
+.account_selector .Label{
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+.account_selector .arrow{
+    -fx-background-color: #000000;
+}
+#choice-box-popup-menu {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 0px;
+    -fx-border-radius: 10px;
+    -fx-background-radius: 10px;
+}
+#choice_prompt_text{
+    -fx-font-size: 1.1em;
+    
+
+    -fx-text-fill: #000000;
+}
+/* login style forms*/
+.login_form_container{
+-fx-spacing: 15px;
+-fx-alignment: top_left;
+}
+.login_form_container .Label{
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000000;
+}
+.input_field{
+    -fx-background-color: #ffffff;
+    -fx-border-color: #000000;
+    -fx-border-width: 0px;
+    -fx-pref-height: 35px;
+    -fx-font-size: 1.1em;
+
+}
+.login_form_container Button{
+    -fx-background-color: #9dcde1;
+    -fx-border-color: #000000;
+    -fx-border-width: 0px;
+    -fx-pref-height: 35px;
+    -fx-pref-width: 200px;
+    
+    -fx-font-size: 1.1em;
+   
+}
+.login_form_container Button:hover{
+    -fx-cursor: hand;
+    -fx-background-color: #8ac7cc;
+}
+.error_lbl{
+    -fx-text-fill: #ff0000;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+}

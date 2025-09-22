@@ -1,0 +1,73 @@
+/* accounts.css - Styles for accounts.fxml */
+
+/* Root container styling */
+.root {
+    -fx-background-color: #8ac7cc;
+    -fx-padding: 24px;
+}
+
+/* Title label */
+.title-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #144982;
+    -fx-padding: 0 0 16px 0;
+}
+
+/* Account list styling */
+.account-list {
+    -fx-background-color: #ffffff;
+    -fx-border-color: #e0e6ed;
+    -fx-border-radius: 8px;
+    -fx-padding: 16px;
+    -fx-effect: dropshadow(gaussian, #cfd8dc, 4, 0.2, 0, 2);
+}
+
+/* Account item styling */
+.account-item {
+    -fx-background-color: #8ac7cc;
+    -fx-border-radius: 6px;
+    -fx-padding: 12px;
+    -fx-margin: 8px 0;
+    -fx-font-size: 16px;
+    -fx-text-fill: #0e2741;
+    -fx-font-family: "Segoe UI", sans-serif;
+    -fx-display: -ms-flexbox;
+    -ms-flex-direction: row;
+    -fx-flex-align: center;
+}
+.stext{
+    -fx-fill:#050505;
+    -fx-font-size: 1.2em;
+    -fx-font-family: "Calibri Light";
+    -fx-font-weight: bold;
+}
+
+.text{
+    -fx-fill:#040404;
+    -fx-font-size: 1.5em;
+    -fx-font-family: "Calibri Light";
+    -fx-font-weight: bold;
+}
+
+/* Button styling */
+.button {
+    -fx-background-color: #0aa99c;
+    -fx-text-fill: #fff;
+    -fx-font-weight: bold;
+    -fx-border-radius: 6px;
+    -fx-padding: 8px 20px;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, #b3c6e0, 2, 0.1, 0, 1);
+}
+
+.button:hover {
+    -fx-background-color: #163434;
+}
+
+/* Error message styling */
+.error-label {
+    -fx-text-fill: #e74c3c;
+    -fx-font-size: 14px;
+    -fx-padding: 8px 0 0 0;
+}

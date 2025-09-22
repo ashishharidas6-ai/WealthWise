@@ -1,0 +1,166 @@
+/* ------------------------------
+   Global Layout Containers
+------------------------------ */
+.main_menu_container {
+    -fx-background-color: linear-gradient(to bottom, #214351, #0d222c);
+    -fx-alignment: center;
+    -fx-padding: 0 10 0 10;
+    
+}
+
+.left_container {
+    -fx-background-color: #9ecde0;
+    -fx-background-radius: 12 12 12 12;
+    -fx-alignment: center;
+    -fx-effect: dropshadow(two-pass-box, rgba(108, 164, 248, 0.35), 12, 0.2, 0, 6);
+}
+
+/* ------------------------------
+   Title / Logo Section
+------------------------------ */
+.title_container {
+    -fx-background-color: #ffffff;
+    -fx-background-radius: 20 20 0 0;
+    -fx-alignment: top-center;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(two-pass-box, rgba(138, 199, 204, 0.18), 8, 0.1, 0, 2);
+}
+
+.title_container .icon {
+    -fx-fill: #8ac7cc;
+    -fx-font-size: 26px;
+    -fx-effect: dropshadow(one-pass-box, rgba(138, 199, 204, 0.25), 2, 0, 0, 1);
+    -fx-opacity: 0.95;
+    -fx-transition: -fx-fill 0.3s;
+}
+
+.title_container Text {
+    -fx-fill: #222;
+    -fx-font-size: 2em;
+    -fx-font-weight: bold;
+    -fx-effect: dropshadow(one-pass-box, rgba(0,0,0,0.07), 1, 0, 0, 1);
+}
+
+/* ------------------------------
+   Menu Section
+------------------------------ */
+.menu_container {
+    -fx-padding: 16 12 16 24;
+    -fx-spacing: 8;
+    -fx-background-color: transparent;
+}
+
+.menu_container Button {
+    -fx-background-color: #8ac7cc;
+    -fx-text-fill: #000;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 56px;
+    -fx-font-size: 1.0em;
+    -fx-border-radius: 8;
+    -fx-border-color: #eaf6fb;
+    -fx-border-width: 1px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108, 164, 248, 0.15), 8, 0.1, 0, 3);
+    -fx-transition: -fx-background-color 0.3s, -fx-text-fill 0.3s, -fx-effect 0.3s, -fx-border-color 0.3s, -fx-scale-x 0.2s, -fx-scale-y 0.2s;
+}
+
+.menu_container Button:hover {
+    -fx-cursor: hand;
+    -fx-background-color: #eaf6fb;
+    -fx-text-fill: #000;
+    -fx-effect: dropshadow(three-pass-box, rgba(108, 164, 248, 0.40), 12, 0.3, 0, 6);
+    -fx-border-color: #8ac7cc;
+    -fx-border-width: 2px;
+    -fx-font-weight: bold;
+    -fx-scale-x: 1.03;
+    -fx-scale-y: 1.03;
+}
+
+.menu_container Button .icon {
+    -fx-fill: #8ac7cc;
+    -fx-font-size: 18px;
+    -fx-opacity: 0.9;
+    -fx-transition: -fx-fill 0.3s;
+}
+
+.menu_container Button:hover .icon {
+    -fx-fill: #5ca6b1;
+}
+
+/* ------------------------------
+   Special Highlight Button
+------------------------------ */
+.button_under {
+    -fx-background-color: linear-gradient(to bottom, #245c73, #3a8ca8);
+    -fx-text-fill: #fff;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 60px;
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-border-radius: 10px;
+    -fx-border-color: #9ecde0;
+    -fx-border-width: 2px;
+    -fx-padding: 10px;
+    -fx-effect: dropshadow(three-pass-box, rgba(108, 164, 248, 0.25), 10, 0.2, 0, 5);
+    -fx-transition: -fx-background-color 0.3s, -fx-text-fill 0.3s, -fx-effect 0.3s, -fx-border-color 0.3s, -fx-scale-x 0.2s, -fx-scale-y 0.2s;
+}
+
+.button_under:hover {
+    -fx-background-color: linear-gradient(to bottom, #9ecde0, #8ac7cc);
+    -fx-text-fill: #222;
+    -fx-border-color: #8ac7cc;
+    -fx-effect: dropshadow(three-pass-box, rgba(108, 164, 248, 0.50), 14, 0.3, 0, 6);
+    -fx-scale-x: 1.05;
+    -fx-scale-y: 1.05;
+}
+
+/* ------------------------------
+   Report / Suggestion Section
+------------------------------ */
+.report_suggestion_container {
+    -fx-background-color: #fff;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-alignment: center;
+    -fx-padding: 12px;
+    -fx-effect: dropshadow(two-pass-box, rgba(108, 164, 248, 0.15), 8, 0.1, 0, 2);
+    -fx-pref-width: 260px; /* Increase container width for more space */
+}
+
+.report_suggestion_container Button {
+    -fx-background-color: #9dcde1;
+    -fx-text-fill: #000;
+    -fx-pref-width: 220px;
+    -fx-pref-height: 40px;
+    -fx-font-size: 1.15em;
+    -fx-border-radius: 8;
+    -fx-effect: dropshadow(three-pass-box, rgba(108, 164, 248, 0.18), 8, 0.1, 0, 3);
+    -fx-transition: -fx-background-color 0.3s, -fx-effect 0.3s, -fx-scale-x 0.2s, -fx-scale-y 0.2s;
+}
+.report_suggestion_container Text{
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
+    -fx-text-fill: #000;
+    -fx-padding: 0 0 8 0;
+}
+.report_suggestion_containerText1 {
+    -fx-font-size: 0.9em;
+    -fx-text-fill: #000;
+    -fx-padding: 0 0 12 0;
+    -fx-wrap-text: true; /* Ensures text wraps */
+    -fx-max-width: 240px; /* Explicitly set max width for wrapping */
+}
+
+.report_suggestion_container Button:hover {
+    -fx-background-color: #8ac7cc;
+    -fx-scale-x: 1.04;
+    -fx-scale-y: 1.04;
+}
+
+/* ------------------------------
+   Unified Button Font Size
+------------------------------ */
+.menu_container Button,
+.button_under,
+.report_suggestion_container Button {
+    -fx-font-size: 1.2em;
+}

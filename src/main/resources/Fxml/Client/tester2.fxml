@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="850.0" styleClass="root" stylesheets="@../../Styles/accounts.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Client.accountController">
+   <children>
+      <VBox layoutX="83.2" layoutY="228.0" prefHeight="500.0" prefWidth="400.0" styleClass="account-list" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Text fx:id="saving" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-label" text="Savings Account" />
+            <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="350.0" styleClass="account-item">
+               <children>
+                  <Text layoutX="19.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Account Number" />
+                  <Label layoutX="54.0" layoutY="28.0" text="3452 4950" />
+                  <Text layoutX="19.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Transaction Limit" />
+                  <Label fx:id="limit_sav" layoutX="57.0" layoutY="77.0" text="₹ 50000" />
+                  <Text layoutX="18.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Date_created" />
+                  <Label layoutX="48.0" layoutY="122.0" text="10/12/2005" />
+                  <Text layoutX="18.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Balance" />
+                  <Label layoutX="55.0" layoutY="167.0" text="₹3000" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="20.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Text fx:id="wallet" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-label" text="Personal Wallet" />
+            <AnchorPane layoutX="47.0" layoutY="79.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="350.0" styleClass="account-item">
+               <children>
+                  <Text layoutX="19.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Account Number" />
+                  <Label layoutX="54.0" layoutY="28.0" text="3452 4950" />
+                  <Text layoutX="19.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Withdrawal Limit" />
+                  <Label fx:id="limit_wal" layoutX="57.0" layoutY="77.0" text="₹ 5000" />
+                  <Text layoutX="18.0" layoutY="119.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Date_created" />
+                  <Label layoutX="48.0" layoutY="122.0" text="10/12/2005" />
+                  <Text layoutX="18.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Balance" />
+                  <Label layoutX="55.0" layoutY="167.0" text="₹3000" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="20.0" />
+               </VBox.margin>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <VBox layoutX="484.0" layoutY="59.2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="581.0" prefWidth="318.0" styleClass="account-list" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="36.0" AnchorPane.topAnchor="10.0">
+         <children>
+            <Text fx:id="wallet11" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-label" text="Move Fund to Wallet" />
+            <AnchorPane maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="248.0" styleClass="account-item">
+               <children>
+                  <Text layoutX="19.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Amount" />
+                  <Label layoutX="54.0" layoutY="28.0" />
+                  <Text layoutX="19.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" />
+                  <Label layoutX="57.0" layoutY="77.0" />
+                  <TextField layoutX="15.0" layoutY="50.0" />
+                  <Button fx:id="transfer_to_wallet" layoutX="50.0" layoutY="107.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="166.0" text="Transfer" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="20.0" />
+               </VBox.margin>
+            </AnchorPane>
+            <Text fx:id="wallet1" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title-label" text="Move Fund to Account" />
+            <AnchorPane layoutX="47.0" layoutY="64.0" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="210.0" prefWidth="238.0" styleClass="account-item">
+               <children>
+                  <Text layoutX="19.0" layoutY="28.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" text="Amount" />
+                  <Label layoutX="54.0" layoutY="28.0" />
+                  <Text layoutX="19.0" layoutY="70.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="stext" />
+                  <Label layoutX="57.0" layoutY="77.0" />
+                  <TextField layoutX="15.0" layoutY="50.0" />
+                  <Button fx:id="transfer_to_account" layoutX="50.0" layoutY="107.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="166.0" text="Transfer" AnchorPane.bottomAnchor="59.400000000000006" />
+               </children>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="20.0" right="10.0" top="20.0" />
+               </VBox.margin>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
