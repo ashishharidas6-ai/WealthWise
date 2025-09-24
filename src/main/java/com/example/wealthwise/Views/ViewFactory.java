@@ -25,6 +25,7 @@ public class ViewFactory {
     private final ObjectProperty<AdminMenuOption> adminSelectedMenuItem ;
     private AnchorPane createClientView;
     private AnchorPane clientsView;
+    private AnchorPane depositView;
 
 
 
@@ -32,6 +33,7 @@ public class ViewFactory {
         this.loginAccountType=AccountType.CLIENT;
         this.clientSelectedMenuItem =new SimpleObjectProperty<>();
         this.adminSelectedMenuItem=new SimpleObjectProperty<>();
+
     }
     public AccountType getLoginAccountType(){
         return loginAccountType;
@@ -172,6 +174,20 @@ public class ViewFactory {
         }
         return clientsView;
     }
+    public AnchorPane getDepositView(){
+        if(depositView==null){
+            try{
+                depositView=new FXMLLoader(getClass().getResource("/Fxml/Admin/deposit.fxml")).load();
+            }catch(Exception e){
+                System.err.println("Error loading deposit.fxml: " + e.getMessage());
+                e.printStackTrace();
+                // Return an empty AnchorPane if FXML fails to load
+                depositView = new AnchorPane();
+            }
+        }
+        return depositView;
+    }
+
     public void showAdminWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
