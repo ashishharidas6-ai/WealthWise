@@ -20,12 +20,14 @@ public class ViewFactory {
     private AnchorPane accountView;
     private AnchorPane profileView;
     private AnchorPane reportView;
+    private AnchorPane logoutView;
 
     //admin views
     private final ObjectProperty<AdminMenuOption> adminSelectedMenuItem ;
     private AnchorPane createClientView;
     private AnchorPane clientsView;
     private AnchorPane depositView;
+    private AnchorPane LogoutAdminView;
 
 
 
@@ -136,6 +138,18 @@ public class ViewFactory {
         }
         return reportView;
     }
+    public AnchorPane getlogoutView(){
+        if(logoutView==null){
+            try{
+                logoutView=new FXMLLoader(
+                        getClass().getResource("/Fxml/Login.fxml")
+                ).load();
+            }catch(Exception e){
+                e.printStackTrace();
+            }
+        }
+        return logoutView;
+    }
 
 
 
@@ -187,7 +201,16 @@ public class ViewFactory {
         }
         return depositView;
     }
-
+     public AnchorPane getLogoutAdminView(){
+         if(LogoutAdminView==null){
+             try{
+                 LogoutAdminView=new FXMLLoader(getClass().getResource("/Fxml/Login.fxml")).load();
+             }catch(Exception e){
+                 e.printStackTrace();
+             }
+         }
+         return LogoutAdminView;
+     }
     public void showAdminWindow(){
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
@@ -214,6 +237,7 @@ public class ViewFactory {
         stage.setScene(scene);
         stage.setTitle("WealthWise");
         stage.setResizable(false);
+
         stage.show();
     }
 

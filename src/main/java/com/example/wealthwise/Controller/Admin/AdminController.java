@@ -1,6 +1,8 @@
 package com.example.wealthwise.Controller.Admin;
 import com.example.wealthwise.Models.Model;
+import com.example.wealthwise.Views.AdminMenuOption;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 import javafx.fxml.Initializable;
 
@@ -13,13 +15,19 @@ public class AdminController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         Model.getInstance().getViewFactory().getAdminSelectedMenuItem().addListener((observable,oldval,newval) ->{
-            switch (newval){
-                case CLIENTS -> admin_parent.setCenter(Model.getInstance().getViewFactory().getClientsView());
-                case DEPOSIT -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDepositView());
-                case CREATE_CLIENT -> admin_parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
+            if (newval == AdminMenuOption.LOGOUT) {
+                Stage stage = (Stage) admin_parent.getScene().getWindow();
+                Model.getInstance().getViewFactory().showloginWindow();
+                stage.close();
+            } else {
+                switch (newval){
+                    case CLIENTS -> admin_parent.setCenter(Model.getInstance().getViewFactory().getClientsView());
+                    case DEPOSIT -> admin_parent.setCenter(Model.getInstance().getViewFactory().getDepositView());
+                    case CREATE_CLIENT -> admin_parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
 
-                default -> admin_parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
+                    default -> admin_parent.setCenter(Model.getInstance().getViewFactory().getCreateClientView());
 
+                }
             }
 
         } );

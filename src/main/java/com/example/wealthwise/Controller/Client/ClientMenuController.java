@@ -34,6 +34,7 @@ public  class ClientMenuController implements Initializable {
         account_btn.setOnAction(actionEvent -> onAccount());
         profile_btn.setOnAction(actionEvent -> onProfile());
         report_btn.setOnAction(actionEvent -> onReport());
+        logout_btn.setOnAction(actionEvent -> onLogout());
 
     }
 
@@ -63,6 +64,10 @@ public  class ClientMenuController implements Initializable {
 
     private void onReport() {
         Model.getInstance().getViewFactory().getClientSelectedMenuItem().set(ClientMenuOptions.REPORT);
+    }
+
+    private void onLogout() {
+        Model.getInstance().getViewFactory().getClientSelectedMenuItem().set(ClientMenuOptions.LOGOUT);
     }
 
 

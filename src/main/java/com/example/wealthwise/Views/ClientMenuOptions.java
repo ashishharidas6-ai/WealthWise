@@ -8,6 +8,7 @@ public enum ClientMenuOptions {
     BUDGET,
     PROFILE,
     REPORT
+    ,LOGOUT;
 
 
 }

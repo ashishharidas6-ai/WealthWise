@@ -47,7 +47,6 @@ public class AdminMenuController implements Initializable{
     }
 
     private void onLogout(){
-        // Add logout functionality here if needed
-        System.out.println("Logout clicked");
+        Model.getInstance().getViewFactory().getAdminSelectedMenuItem().set(AdminMenuOption.LOGOUT);
     }
 }
