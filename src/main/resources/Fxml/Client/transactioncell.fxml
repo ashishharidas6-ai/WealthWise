@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Line?>
+
+
+<AnchorPane prefHeight="60.0" prefWidth="550.0" styleClass="cell_container" stylesheets="@../../Styles/transactioncell.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Client.TransactionCellController">
+   <children>
+      <VBox prefHeight="50.0" prefWidth="50.0" styleClass="trans_icon_container" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="5.0">
+         <children>
+            <ImageView fx:id="in_icon" fitHeight="21.0" fitWidth="21.0" preserveRatio="true">
+               <image>
+                  <Image url="@../../Images/transaction.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </VBox.margin>
+               <effect>
+                  <DropShadow />
+               </effect>
+            </ImageView>
+         </children>
+      </VBox>
+      <Label fx:id="trans_date_lbl" layoutX="79.0" layoutY="21.0" styleClass="trans_date_lbl" text="10-12-2005" AnchorPane.leftAnchor="100.0" />
+      <Label fx:id="sender_lbl" layoutX="183.0" layoutY="21.0" styleClass="trans_pAddress_lbl" text="Ashish" AnchorPane.leftAnchor="200.0" />
+      <Line endY="20.0" layoutX="275.0" layoutY="21.0" AnchorPane.leftAnchor="274.5" AnchorPane.topAnchor="20.5" />
+      <Label fx:id="recevier_lbl" layoutX="349.0" layoutY="21.0" styleClass="trans_pAddress_lbl" text="Anmith" AnchorPane.leftAnchor="300.0" />
+      <Label fx:id="amount_lbl" alignment="CENTER" layoutX="482.0" layoutY="22.0" prefHeight="18.0" prefWidth="50.0" styleClass="trans_amount_lbl" text="₹ 2000" />
+      <Label fx:id="category_lbl" layoutX="378.0" layoutY="21.0" styleClass="trans_category_lbl" text="Category" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,45 @@
+.cell_container {
+    
+    -fx-background-color:liner-gradient(to right, #f9f9f9, #ffffff);
+    -fx-border-color: #e0e0e0;
+    -fx-border-width: 1;
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+}
+.trans_icon_container {
+    -fx-alignment: center;
+    
+    -fx-background-color: #d1e7dd;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-drop-shadow: 2px 2px 5px rgba(0,0,0,0);
+}
+.trans_date_lbl{
+    -fx-font-size: 12;
+    -fx-text-fill: #888888;
+
+}
+.trans_pAddress_lbl{
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+    
+}
+.cell_container Line{
+    -fx-stroke: #0d0d0d;
+}
+.trans_amount_lbl{
+    -fx-font-size: 12;
+    -fx-font-weight:bold;
+    -fx-text-fill: #abdef4;
+    -fx-alignment: center;
+    -fx-background-color: #151515;
+    -fx-boder-radius: 5;
+
+}
+.trans_category_lbl{
+    -fx-font-size: 12;
+    -fx-text-fill: #555555;
+}
+
+    
+
