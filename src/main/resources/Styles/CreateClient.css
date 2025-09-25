@@ -24,11 +24,11 @@
 }
 
 .create_client_container TextField {
-    -fx-padding: 10;
+    -fx-padding: 5;
     -fx-border-color: #3a8ca8;
     -fx-border-radius: 5;
     -fx-background-radius: 5;
-    -fx-font-size: 10px;
+    -fx-font-size: 12px;
     -fx-background-color: #ffffff;
     -fx-effect: dropshadow(gaussian, rgba(58, 140, 168, 0.10), 8, 0, 0, 2);
 }
@@ -41,7 +41,7 @@
 }
 
 .create_client_container Button {
-    -fx-padding: 10;
+    -fx-padding: 5 10 5 10;
     -fx-background-color: linear-gradient(to right, #387e8c, #3a8ca8);
     -fx-text-fill: white;
     -fx-font-size: 10px;

@@ -13,23 +13,23 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="750.0" prefWidth="850.0" styleClass="create_client_container" stylesheets="@../../Styles/CreateClient.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Admin.CreateClientController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="create_client_container_Text" text="Create New Client Account" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <VBox fillWidth="false" layoutX="54.4" layoutY="100.0" prefHeight="650.0" prefWidth="313.0" styleClass="create_client_container_VBox" stylesheets="@../../Styles/Admin/CreateClient.css" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="34.0" AnchorPane.topAnchor="60.0">
+      <VBox fillWidth="false" layoutX="74.4" layoutY="84.8" prefHeight="682.0" prefWidth="752.0" styleClass="create_client_container_VBox" stylesheets="@../../Styles/Admin/CreateClient.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="54.0" AnchorPane.topAnchor="65.0">
          <children>
             <Label styleClass="create_client_container_Text" text="First Name :" />
-            <TextField fx:id="first_name" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" />
+            <TextField fx:id="first_name" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" />
             <Label layoutX="10.0" layoutY="10.0" styleClass="create_client_container_Text" text="Last Name :" />
-            <TextField fx:id="last_name" layoutX="10.0" layoutY="28.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" />
+            <TextField fx:id="last_name" layoutX="10.0" layoutY="28.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" />
             <Label layoutX="10.0" layoutY="54.0" styleClass="create_client_container_Text" text="Password :" />
-            <TextField fx:id="password" layoutX="10.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" />
-            <Label layoutX="10.0" layoutY="98.0" styleClass="payee_address_lbl" stylesheets="@../../Styles/Admin/CreateClient.css" text="Payee Address :" />
-            <CheckBox fx:id="payee_address_wallet" mnemonicParsing="false" />
+            <TextField fx:id="password" layoutX="10.0" layoutY="72.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" />
+            <Label layoutX="10.0" layoutY="98.0" styleClass="payee_address_lbl" stylesheets="@../../Styles/Admin/CreateClient.css" text="Payee Address (Email) :" />
+            <TextField fx:id="payee_address" layoutX="10.0" layoutY="116.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" promptText="client@example.com" />
             <Label layoutX="10.0" layoutY="142.0" text="Add Accounts" />
             <CheckBox fx:id="add_wallet_check" layoutX="10.0" layoutY="160.0" mnemonicParsing="false" text="Add  Wallet :" />
             <Label layoutX="10.0" layoutY="142.0" text="Wallet Balance :" />
-            <TextField fx:id="wallet_balance" layoutX="10.0" layoutY="116.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" />
+            <TextField fx:id="wallet_balance" layoutX="10.0" layoutY="116.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" />
             <CheckBox fx:id="saving_check" layoutX="10.0" layoutY="195.0" mnemonicParsing="false" text="Add  Savings Account :" />
             <Label layoutX="10.0" layoutY="212.0" text="Account Balance" />
-            <TextField fx:id="account_balance" layoutX="10.0" layoutY="230.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="26.0" prefWidth="139.0" />
+            <TextField fx:id="account_balance" layoutX="10.0" layoutY="230.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="139.0" />
             <Button fx:id="create_client_button" mnemonicParsing="false" styleClass="create_client_container_Button" text="Create New Client">
                <graphic>
                   <ImageView fitHeight="21.0" fitWidth="21.0">

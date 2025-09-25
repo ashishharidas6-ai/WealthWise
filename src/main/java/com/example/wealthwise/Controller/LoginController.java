@@ -38,13 +38,33 @@ public class LoginController implements Initializable {
         Stage stage = (Stage) login_btn.getScene().getWindow();
 
         // Close it
-        Model.getInstance().getViewFactory().closeStage(stage);
+
 
         // Open client window
        if(Model.getInstance().getViewFactory().getLoginAccountType()==AccountType.CLIENT){
-           Model.getInstance().getViewFactory().showClientWindow();
+           //evaluation
+           Model.getInstance().evaluateclientCred(payee_address_fld.getText(),password_fld.getText());
+           if(Model.getInstance().getClientLoginSuccessFlag()){
+               Model.getInstance().getViewFactory().showClientWindow();
+               //close login state
+               Model.getInstance().getViewFactory().closeStage(stage);
+           }else{
+               payee_address_fld.setText("");
+               password_fld.setText("");
+               error_lbl.setText("Invalid Credentials!");
+           }
        }else{
-           Model.getInstance().getViewFactory().showAdminWindow();
+           //evaluation
+           Model.getInstance().evaluateAdminCred(payee_address_fld.getText(),password_fld.getText());
+           if(Model.getInstance().getAdminLoginSuccessFlag()){
+               Model.getInstance().getViewFactory().showAdminWindow();
+               //close login state
+               Model.getInstance().getViewFactory().closeStage(stage);
+           }else{
+               payee_address_fld.setText("");
+               password_fld.setText("");
+               error_lbl.setText("Invalid Credentials!");
+           }
        }
     }
 
