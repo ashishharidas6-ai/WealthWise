@@ -18,7 +18,7 @@
          <children>
             <HBox alignment="CENTER" prefHeight="60.0" prefWidth="820.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search By Payee Address " />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search Client " />
                   <TextField fx:id="search_payee">
                      <HBox.margin>
                         <Insets left="10.0" />
@@ -41,7 +41,7 @@
             <ListView fx:id="payee_list" prefHeight="200.0" prefWidth="820.0" />
             <VBox alignment="TOP_CENTER" prefHeight="315.0" prefWidth="700.0">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deposit Section" textAlignment="CENTER" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deposit to Savings Account" textAlignment="CENTER" />
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" />
                   <TextField fx:id="amount_deposit" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="38.0" prefWidth="155.0">
                      <VBox.margin>

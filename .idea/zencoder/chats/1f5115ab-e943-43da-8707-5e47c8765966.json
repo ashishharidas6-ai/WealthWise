@@ -1,0 +1,104 @@
+{
+    "checksum": "d8caec256f1993f995be12ad3b1c222a0d2596b0acceda261c8d55596b7bbced",
+    "data": {
+    "id": "1f5115ab-e943-43da-8707-5e47c8765966",
+    "createdAt": 1758713321017,
+    "updatedAt": 1758713321474,
+    "title": "Explain this: \"$1,250\" Cannot resolve symbol '1...",
+    "messages": [
+        {
+            "id": "f3b68375-29b3-4fb9-a53a-a50b842a76ab",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Explain this:"
+                },
+                {
+                    "type": "codeSnippet",
+                    "text": "\"$1,250\"",
+                    "language": "xml"
+                },
+                {
+                    "type": "text",
+                    "text": "Cannot resolve symbol '1,250'"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "C:\\Users\\ashis\\OneDrive\\Desktop\\New folder (2)\\wealthwise backup\\src\\main\\resources\\Fxml\\Client\\profile.fxml",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder (2)/wealthwise backup/src/main/resources/Fxml/Client/profile.fxml",
+                    "content": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<?import javafx.scene.chart.PieChart?>\n<?import javafx.scene.control.*?>\n<?import javafx.scene.image.Image?>\n<?import javafx.scene.image.ImageView?>\n<?import javafx.scene.layout.*?>\n<?import javafx.scene.text.Text?>\n\n<AnchorPane xmlns=\"http://javafx.com/javafx/24.0.1\"\n            xmlns:fx=\"http://javafx.com/fxml/1\"\n            fx:controller=\"com.example.wealthwise.Controller.Client.profileController\"\n            stylesheets=\"@../../Styles/Dashboard.css\"\n            prefWidth=\"900\" prefHeight=\"750\"\n            styleClass=\"dashboard\">\n\n    <!-- Profile Header -->\n    <HBox spacing=\"15\" alignment=\"CENTER_LEFT\" AnchorPane.topAnchor=\"30.0\" AnchorPane.leftAnchor=\"20.0\">\n        <ImageView fx:id=\"avatarImage\" fitWidth=\"80\" fitHeight=\"80\">\n            <image>\n                <Image url=\"/Images/profile-user.png\"/>\n            </image>\n        </ImageView>\n        <VBox spacing=\"5\">\n            <Label fx:id=\"usernameLabel\" text=\"John Doe\" styleClass=\"section_title\"/>\n            <Label fx:id=\"emailLabel\" text=\"johndoe@email.com\" styleClass=\"date_lbl\"/>\n            <HBox spacing=\"10\">\n                <Button fx:id=\"editProfileBtn\" text=\"Edit Profile\"/>\n                <Button fx:id=\"logoutBtn\" text=\"Logout\"/>\n            </HBox>\n        </VBox>\n    </HBox>\n\n    <!-- Account Summary -->\n    <HBox spacing=\"15\" AnchorPane.topAnchor=\"130.0\" AnchorPane.leftAnchor=\"20.0\">\n        <VBox styleClass=\"account_view\" prefWidth=\"200\" alignment=\"CENTER\">\n            <Label text=\"Total Spent\"/>\n            <Label fx:id=\"totalSpentLabel\" text=\"$1,250\" styleClass=\"expense_ammount\"/>\n        </VBox>\n        <VBox styleClass=\"account_view\" prefWidth=\"200\" alignment=\"CENTER\">\n            <Label text=\"Monthly Budget\"/>\n            <Label fx:id=\"monthlyBudgetLabel\" text=\"$2,000\" styleClass=\"income_ammount\"/>\n        </VBox>\n        <VBox styleClass=\"account_view\" prefWidth=\"200\" alignment=\"CENTER\">\n            <Label text=\"Savings\"/>\n            <Label fx:id=\"savingsLabel\" text=\"$750\" styleClass=\"income_ammount\"/>\n        </VBox>\n    </HBox>\n\n    <!-- Budget Progress -->\n    <VBox spacing=\"5\" AnchorPane.topAnchor=\"230.0\" AnchorPane.leftAnchor=\"20.0\">\n        <Label text=\"Budget Usage\" styleClass=\"section_title\"/>\n        <ProgressBar fx:id=\"budgetProgressBar\" progress=\"0.6\" prefWidth=\"600\"/>\n        <Label fx:id=\"budgetPercentLabel\" text=\"60%\"/>\n    </VBox>\n\n    <!-- Charts and Transactions -->\n    <HBox spacing=\"20\" AnchorPane.topAnchor=\"300.0\" AnchorPane.leftAnchor=\"20.0\">\n        <VBox spacing=\"10\">\n            <Label text=\"Expense Categories\" styleClass=\"section_title\"/>\n            <PieChart fx:id=\"expensePieChart\" prefWidth=\"300\" prefHeight=\"250\"/>\n        </VBox>\n        <VBox spacing=\"10\">\n            <Label text=\"Recent Transactions\" styleClass=\"section_title\"/>\n            <ListView fx:id=\"transactionsList\" prefHeight=\"250\" styleClass=\"transaction_listview\"/>\n            <Button fx:id=\"viewAllBtn\" text=\"View All\"/>\n        </VBox>\n    </HBox>\n\n    <!-- Quick Actions -->\n    <HBox spacing=\"15\" AnchorPane.topAnchor=\"580.0\" AnchorPane.leftAnchor=\"20.0\">\n        <Button fx:id=\"addExpenseBtn\" text=\"Add Expense\"/>\n        <Button fx:id=\"addIncomeBtn\" text=\"Add Income\"/>\n    </HBox>\n\n    <!-- Settings -->\n    <HBox spacing=\"15\" AnchorPane.topAnchor=\"620.0\" AnchorPane.leftAnchor=\"20.0\">\n        <Label text=\"Dark Mode\"/>\n        <CheckBox fx:id=\"darkModeCheckBox\"/>\n        <Button fx:id=\"settingsBtn\" text=\"Settings\"/>\n        <Label fx:id=\"lastSyncLabel\" text=\"Last synced: 10 mins ago\"/>\n    </HBox>\n\n</AnchorPane>",
+                    "language": "xml"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758713321024,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Explain this:"
+                            },
+                            {
+                                "type": "codeBlock",
+                                "attrs": {
+                                    "language": "xml"
+                                },
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "\"$1,250\""
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "text": "Cannot resolve symbol '1,250'"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "87fbb50d-d93d-409d-9b1c-bab0e6e90a26",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "",
+                    "title": "You've hit your plan usage limits",
+                    "actions": [
+                        {
+                            "type": "upgradePlan",
+                            "title": "Upgrade plan",
+                            "waitSeconds": 63506
+                        },
+                        {
+                            "type": "externalAction",
+                            "title": "Try Again",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1758713321474,
+            "isInternal": false
+        }
+    ],
+    "isAgent": false,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": true,
+    "isRepoInfoAgent": false
+}
+}

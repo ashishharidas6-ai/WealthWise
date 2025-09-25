@@ -1,0 +1,81 @@
+{
+    "checksum": "aee98c10784bf43f51bc1e925fef76c480af735400bfe7d0462de05d07672d1c",
+    "data": {
+    "id": "40356dc2-4db4-47fe-b9a4-90a820aedaf4",
+    "createdAt": 1758712972508,
+    "updatedAt": 1758712973307,
+    "title": "fix the profile.xml",
+    "messages": [
+        {
+            "id": "78c8b83f-8a19-4fc1-8680-bbc756ca1c44",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "fix the profile.xml"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Controller/Admin/ClientCellController.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder (2)/wealthwise backup/src/main/java/com/example/wealthwise/Controller/Admin/ClientCellController.java",
+                    "sources": [
+                        "opened_tab"
+                    ]
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758712972516,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "fix the profile.xml"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "2d42b837-5bc2-46c9-899e-31ee4eb9424c",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "",
+                    "title": "You've hit your plan usage limits",
+                    "actions": [
+                        {
+                            "type": "upgradePlan",
+                            "title": "Upgrade plan",
+                            "waitSeconds": 63855
+                        },
+                        {
+                            "type": "externalAction",
+                            "title": "Try Again",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1758712973307,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}

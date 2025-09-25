@@ -1,0 +1,104 @@
+{
+    "checksum": "a2c0984f3c94c16a800623e1bb656a4b53fcd9819688ba2d7c0220a2e9464cf2",
+    "data": {
+    "id": "fe2c7c0e-4327-42eb-8d30-d0731db46b64",
+    "createdAt": 1758719462080,
+    "updatedAt": 1758719464280,
+    "title": "Fix this: (new Image(String.valueOf(getClass()....",
+    "messages": [
+        {
+            "id": "771efa23-b6ad-42ca-b27c-d241b1d2a25d",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Fix this:"
+                },
+                {
+                    "type": "codeSnippet",
+                    "text": "(new Image(String.valueOf(getClass().getResource(\"/Images/logo.png\"))))",
+                    "language": "java"
+                },
+                {
+                    "type": "text",
+                    "text": "'Image' is abstract; cannot be instantiated"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "C:\\Users\\ashis\\OneDrive\\Desktop\\New folder (2)\\wealthwise backup\\src\\main\\java\\com\\example\\wealthwise\\Views\\ViewFactory.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder (2)/wealthwise backup/src/main/java/com/example/wealthwise/Views/ViewFactory.java",
+                    "content": "package com.example.wealthwise.Views;\n\nimport com.example.wealthwise.Controller.Admin.AdminController;\nimport com.example.wealthwise.Controller.Client.ClientController;\nimport javafx.beans.property.ObjectProperty;\nimport javafx.beans.property.SimpleObjectProperty;\nimport javafx.fxml.FXMLLoader;\nimport javafx.scene.Scene;\nimport javafx.scene.layout.AnchorPane;\nimport javafx.stage.Stage;\n\nimport java.awt.*;\n\npublic class ViewFactory {\n    private AccountType loginAccountType;\n    //client views\n    private final ObjectProperty<ClientMenuOptions> clientSelectedMenuItem ;\n    private AnchorPane dashboardView;\n    private AnchorPane transactionView;\n    private AnchorPane investmentView;\n    private AnchorPane budgetView;\n    private AnchorPane accountView;\n    private AnchorPane profileView;\n    private AnchorPane reportView;\n    private AnchorPane logoutView;\n\n    //admin views\n    private final ObjectProperty<AdminMenuOption> adminSelectedMenuItem ;\n    private AnchorPane createClientView;\n    private AnchorPane clientsView;\n    private AnchorPane depositView;\n    private AnchorPane LogoutAdminView;\n\n\n\n    public ViewFactory(){\n        this.loginAccountType=AccountType.CLIENT;\n        this.clientSelectedMenuItem =new SimpleObjectProperty<>();\n        this.adminSelectedMenuItem=new SimpleObjectProperty<>();\n\n    }\n    public AccountType getLoginAccountType(){\n        return loginAccountType;\n    }\n\n    public void setLoginAccountType(AccountType loginAccountType)\n    {\n    this.loginAccountType=loginAccountType;\n    }\n\n    public ObjectProperty<ClientMenuOptions> getClientSelectedMenuItem(){\n        return clientSelectedMenuItem;\n    }\n    // src/main/java/com/example/wealthwise/Views/ViewFactory.java\n\n    public AnchorPane getDashboardView(){\n        if (dashboardView == null) {\n            try {\n                dashboardView = new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/Dashboard.fxml\")\n                ).load();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n        }\n        return dashboardView;\n    }\n\n    public AnchorPane getTransactionView() {\n        if (transactionView == null) {\n            try {\n                transactionView = new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/Transactions.fxml\")\n                ).load();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n        }\n        return transactionView;\n    }\n\n    public AnchorPane getInvestmentView() {\n        if (investmentView == null) {\n            try {\n                investmentView = new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/Investment.fxml\")\n                ).load();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n        }\n        return investmentView;\n    }\n    public AnchorPane getBudgetView(){\n        if (budgetView == null) {\n            try {\n                budgetView = new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/Budget.fxml\")\n                ).load();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n        }\n        return budgetView;\n\n    }\n    public AnchorPane getAccountView(){\n        if (accountView == null) {\n            try {\n                accountView = new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/accounts.fxml\")\n                ).load();\n            } catch (Exception e) {\n                e.printStackTrace();\n            }\n        }\n        return accountView;\n    }\n    public AnchorPane getProfileView(){\n        if(profileView==null){\n            try{\n                profileView=new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/profile.fxml\")\n                ).load();\n            }catch(Exception e){\n                e.printStackTrace();\n            }\n        }\n        return profileView;\n    }\n    public AnchorPane getReportView(){\n        if(reportView==null){\n            try{\n                reportView=new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Client/report.fxml\")\n                ).load();\n            }catch(Exception e){\n                e.printStackTrace();\n            }\n        }\n        return reportView;\n    }\n    public AnchorPane getlogoutView(){\n        if(logoutView==null){\n            try{\n                logoutView=new FXMLLoader(\n                        getClass().getResource(\"/Fxml/Login.fxml\")\n                ).load();\n            }catch(Exception e){\n                e.printStackTrace();\n            }\n        }\n        return logoutView;\n    }\n\n\n\n\n    public void showClientWindow(){\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"/Fxml/Client/Client.fxml\"));\n        ClientController clientController = new ClientController();\n        loader.setController(clientController);\n        createStage(loader);\n    }\n\n// Admin Views Sections\n\n    public ObjectProperty<AdminMenuOption> getAdminSelectedMenuItem()\n    {\n        return adminSelectedMenuItem;\n    }\n    public AnchorPane getCreateClientView() {\n        if(createClientView==null){\n            try{\n                createClientView= new FXMLLoader(getClass().getResource(\"/Fxml/Admin/createclient.fxml\")).load();\n            }catch(Exception e){\n                e.printStackTrace();\n            }\n        }\n        return createClientView;\n    }\n\n    public AnchorPane getClientsView(){\n        if(clientsView==null){\n            try{\n                clientsView=new FXMLLoader(getClass().getResource(\"/Fxml/Admin/clients.fxml\")).load();\n            }catch(Exception e){\n                e.printStackTrace();\n            }\n        }\n        return clientsView;\n    }\n    public AnchorPane getDepositView(){\n        if(depositView==null){\n            try{\n                depositView=new FXMLLoader(getClass().getResource(\"/Fxml/Admin/deposit.fxml\")).load();\n            }catch(Exception e){\n                System.err.println(\"Error loading deposit.fxml: \" + e.getMessage());\n                e.printStackTrace();\n                // Return an empty AnchorPane if FXML fails to load\n                depositView = new AnchorPane();\n            }\n        }\n        return depositView;\n    }\n     public AnchorPane getLogoutAdminView(){\n         if(LogoutAdminView==null){\n             try{\n                 LogoutAdminView=new FXMLLoader(getClass().getResource(\"/Fxml/Login.fxml\")).load();\n             }catch(Exception e){\n                 e.printStackTrace();\n             }\n         }\n         return LogoutAdminView;\n     }\n    public void showAdminWindow(){\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"/Fxml/Admin/Admin.fxml\"));\n        AdminController adminController = new AdminController();\n        loader.setController(adminController);\n        createStage(loader);\n\n\n    }\n\n    public void showloginWindow(){\n        FXMLLoader loader = new FXMLLoader(getClass().getResource(\"/Fxml/Login.fxml\"));\n        createStage(loader);\n    }\n\n\n    private void createStage(FXMLLoader loader){\n        Scene scene = null ;\n        try{\n            scene = new Scene(loader.load());\n        } catch (Exception e) {\n            e.printStackTrace();\n        }\n        Stage stage = new Stage();\n        stage.setScene(scene);\n        stage.getIcons().add(new Image(String.valueOf(getClass().getResource(\"/Images/logo.png\"))));\n        stage.setTitle(\"WealthWise\");\n        stage.setResizable(false);\n\n        stage.show();\n    }\n\n    public void closeStage(Stage stage){\n        stage.close();\n\n    }\n\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758719462094,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Fix this:"
+                            },
+                            {
+                                "type": "codeBlock",
+                                "attrs": {
+                                    "language": "java"
+                                },
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "(new Image(String.valueOf(getClass().getResource(\"/Images/logo.png\"))))"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "text": "'Image' is abstract; cannot be instantiated"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "8d22b767-4297-42ab-8445-1687dece4d40",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "",
+                    "title": "You've hit your plan usage limits",
+                    "actions": [
+                        {
+                            "type": "upgradePlan",
+                            "title": "Upgrade plan",
+                            "waitSeconds": 57364
+                        },
+                        {
+                            "type": "externalAction",
+                            "title": "Try Again",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1758719464279,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false
+}
+}

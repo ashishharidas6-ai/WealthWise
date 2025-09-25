@@ -1,0 +1,49 @@
+
+.client_cell_container{
+-fx-background-color: linear-gradient(to right, #8bdcf0, #104950);
+-fx-drop-shadow: 2px 2px 5px rgba(46, 68, 78, 0.1);
+
+
+
+}
+.client_icon{
+    -fx-alignment: center;
+    
+    -fx-background-color: #d1e7dd;
+    -fx-border-radius: 50%;
+    -fx-background-radius: 50%;
+    -fx-drop-shadow: 2px 2px 5px rgba(0,0,0,0);
+}
+.client_cell_container_Hbox{
+    -fx-spacing: 10;
+    -fx-padding: 10;
+    -fx-alignment: center_left;
+    -fx-background-color: linear-gradient(to right, #139bb4, #82c4cd);
+    -fx-border-radius: 5;
+    -fx-background-radius: 5;
+
+}
+.client_cell_container_Hbox Label{
+    -fx-font-size: 12;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+
+}
+.acc_display_lbl{
+    -fx-font-size: 12;
+    -fx-text-fill: #888888;
+
+}
+.delete_btn{
+    -fx-background-color: #e0b9b9;
+    -fx-text-fill: rgb(0, 0, 0);
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+    -fx-background-radius: 5;
+    -fx-padding: 5 10 5 10;
+
+}
+.delete_btn:hover{
+    -fx-background-color: #abdef4;
+    -fx-text-fill: #0d0d0d;
+}

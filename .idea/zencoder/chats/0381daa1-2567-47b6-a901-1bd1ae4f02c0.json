@@ -1,0 +1,59 @@
+{
+    "checksum": "d356f81c0c5959f806ada258d1457c88d870b82955e226f40607250401342b9c",
+    "data": {
+    "id": "0381daa1-2567-47b6-a901-1bd1ae4f02c0",
+    "createdAt": 1758817680147,
+    "updatedAt": 1758817680153,
+    "title": "fix all erros in this be carefull",
+    "messages": [
+        {
+            "id": "cc022c51-e656-48a6-aa31-dbc4b48a012a",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "fix all erros in this be carefull"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Models/DatabaseDriver.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/wealthwise first_phase/src/main/java/com/example/wealthwise/Models/DatabaseDriver.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "// Add inside DatabaseDriver\nimport com.example.wealthwise.Models.Account;\nimport com.example.wealthwise.Models.Client;\n\nimport java.sql.Connection;\nimport java.sql.PreparedStatement;\nimport java.sql.ResultSet;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.time.LocalDate;\n\n\n    private Connection connection;\n\n// Search clients and return full Client objects\npublic List<Client> searchClientsByPayeeAddress(String searchText) {\n    List<Client> clients = new ArrayList<>();\n    String query = \"SELECT FirstName, LastName, PayeeAddress, Date FROM Clients WHERE PayeeAddress LIKE ?\";\n    try (PreparedStatement ps = connection.prepareStatement(query)) {\n        ps.setString(1, \"%\" + searchText + \"%\");\n        try (ResultSet rs = ps.executeQuery()) {\n            while (rs.next()) {\n                String fname = rs.getString(\"FirstName\");\n                String lname = rs.getString(\"LastName\");\n                String pAddr = rs.getString(\"PayeeAddress\");\n                LocalDate date = LocalDate.parse(rs.getString(\"Date\"));\n\n                // Wallet account\n                Account wallet = null;\n                try (PreparedStatement ps2 = connection.prepareStatement(\"SELECT * FROM WalletAccounts WHERE Owner = ?\")) {\n                    ps2.setString(1, fname + \" \" + lname);\n                    try (ResultSet rs2 = ps2.executeQuery()) {\n                        if (rs2.next()) {\n                            wallet = new Account(rs2.getString(\"AccountNumber\"), rs2.getDouble(\"Balance\"));\n                        }\n                    }\n                }\n\n                // Savings account\n                Account savings = null;\n                try (PreparedStatement ps3 = connection.prepareStatement(\"SELECT * FROM SavingsAccounts WHERE Owner = ?\")) {\n                    ps3.setString(1, fname + \" \" + lname);\n                    try (ResultSet rs3 = ps3.executeQuery()) {\n                        if (rs3.next()) {\n                            savings = new Account(rs3.getString(\"AccountNumber\"), rs3.getDouble(\"Balance\"));\n                        }\n                    }\n                }\n\n                clients.add(new Client(fname, lname, pAddr, wallet, savings, date));\n            }\n        }\n    } catch (Exception e) {\n        e.printStackTrace();\n    }\n    return clients;\n}\n\n        // Deposit money into a client’s wallet\n        public boolean depositToWallet(String payeeAddress, double amount) {\n            String clientName = null;\n\n            // Find client name\n            String selectQuery = \"SELECT FirstName, LastName FROM Clients WHERE PayeeAddress = ?\";\n            Connection connection;\n            try (PreparedStatement ps = connection.prepareStatement(selectQuery)) {\n                ps.setString(1, payeeAddress);\n                try (ResultSet rs = ps.executeQuery()) {\n                    if (rs.next()) {\n                        clientName = rs.getString(\"FirstName\") + \" \" + rs.getString(\"LastName\");\n                    }\n                }\n            } catch (Exception e) {\n                e.printStackTrace();\n                return false;\n            }\n\n            if (clientName == null) {\n                System.err.println(\"Deposit failed: Payee not found\");\n                return false;\n            }\n\n            // Update balance\n            String updateQuery = \"UPDATE WalletAccounts SET Balance = Balance + ? WHERE Owner = ?\";\n            try (PreparedStatement ps = connection.prepareStatement(updateQuery)) {\n                ps.setDouble(1, amount);\n                ps.setString(2, clientName);\n                int rowsAffected = ps.executeUpdate();\n                return rowsAffected > 0;\n            } catch (Exception e) {\n                e.printStackTrace();\n                return false;\n            }\n        }\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758817680153,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "fix all erros in this be carefull"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        }
+    ],
+    "isAgent": true,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}

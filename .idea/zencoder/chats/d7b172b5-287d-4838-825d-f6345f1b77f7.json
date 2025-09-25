@@ -1,0 +1,71 @@
+{
+    "checksum": "2dcc3c82bd73361c274022df4727b9161ded899ef70a93a9a951378780246e2d",
+    "data": {
+    "id": "d7b172b5-287d-4838-825d-f6345f1b77f7",
+    "createdAt": 1758734109026,
+    "updatedAt": 1758734996691,
+    "title": "Generate a commit message based on the latest c...",
+    "messages": [
+        {
+            "id": "f6cce428-af7b-422a-a97d-71b274f0005c",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Generate a commit message based on the latest changes that we've been working on"
+                }
+            ],
+            "createdAt": 1758734109392,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Generate a commit message based on the latest changes that we've been working on"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "eaaead94-5574-494a-842a-a143c99a647b",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "",
+                    "title": "You've hit your plan usage limits",
+                    "actions": [
+                        {
+                            "type": "upgradePlan",
+                            "title": "Upgrade plan",
+                            "waitSeconds": 41830
+                        },
+                        {
+                            "type": "externalAction",
+                            "title": "Try Again",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1758734996691,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}

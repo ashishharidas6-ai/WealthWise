@@ -1,0 +1,80 @@
+{
+    "checksum": "c29fe966d3b66e6d356d34dbaacf91be5d91c002bf16181ba5136ea19d9ba30e",
+    "data": {
+    "id": "52c96f2a-834d-4a22-8f54-ced7f7e643b0",
+    "createdAt": 1758817598022,
+    "updatedAt": 1758817598029,
+    "title": "Fix this: databaseDriver.searchClientsByPayeeAd...",
+    "messages": [
+        {
+            "id": "be0c3a11-24ce-4671-92b3-ef4b16840d2d",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Fix this:"
+                },
+                {
+                    "type": "codeSnippet",
+                    "text": "databaseDriver.searchClientsByPayeeAddress(searchText)",
+                    "language": "java"
+                },
+                {
+                    "type": "text",
+                    "text": "Cannot resolve method 'searchClientsByPayeeAddress(String)'"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "C:\\Users\\ashis\\OneDrive\\Desktop\\wealthwise first_phase\\src\\main\\java\\com\\example\\wealthwise\\Controller\\Admin\\depositController.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/wealthwise first_phase/src/main/java/com/example/wealthwise/Controller/Admin/depositController.java",
+                    "content": "package com.example.wealthwise.Controller.Admin;\n\nimport javafx.fxml.FXML;\nimport javafx.fxml.Initializable;\nimport javafx.scene.control.*;\nimport javafx.collections.FXCollections;\nimport javafx.collections.ObservableList;\n\nimport com.example.wealthwise.Models.Model;\nimport com.example.wealthwise.Models.DatabaseDriver;\nimport com.example.wealthwise.Models.Client;\n\nimport java.net.URL;\nimport java.util.List;\nimport java.util.ResourceBundle;\n\npublic class depositController implements Initializable {\n    @FXML\n    public TextField search_payee;\n    @FXML\n    public Button search_btn_payee;\n    @FXML\n    public ListView<Client> payee_list;  // now holds Client objects\n    @FXML\n    public TextField amount_deposit;\n    @FXML\n    public Button deposit_btn;\n\n    private final ObservableList<Client> payeeObservableList = FXCollections.observableArrayList();\n\n    @Override\n    public void initialize(URL location, ResourceBundle resources) {\n        System.out.println(\"DepositController initialized successfully\");\n\n        payee_list.setItems(payeeObservableList);\n\n        search_btn_payee.setOnAction(event -> searchPayees());\n        deposit_btn.setOnAction(event -> depositAmount());\n    }\n\n    private void searchPayees() {\n        String searchText = search_payee.getText().trim();\n        if (searchText.isEmpty()) {\n            System.out.println(\"Search text is empty\");\n            return;\n        }\n\n        DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();\n        payeeObservableList.clear();\n\n        List<Client> clients = databaseDriver.searchClientsByPayeeAddress(searchText);\n        if (clients.isEmpty()) {\n            System.out.println(\"No payees found for: \" + searchText);\n        } else {\n            payeeObservableList.addAll(clients);\n        }\n    }\n\n    private void depositAmount() {\n        Client selectedClient = payee_list.getSelectionModel().getSelectedItem();\n        if (selectedClient == null) {\n            System.out.println(\"No payee selected\");\n            return;\n        }\n\n        String amountText = amount_deposit.getText().trim();\n        if (amountText.isEmpty()) {\n            System.out.println(\"Amount is empty\");\n            return;\n        }\n\n        double amount;\n        try {\n            amount = Double.parseDouble(amountText);\n            if (amount <= 0) {\n                System.out.println(\"Amount must be positive\");\n                return;\n            }\n        } catch (NumberFormatException e) {\n            System.out.println(\"Invalid amount format\");\n            return;\n        }\n\n        DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();\n        boolean success = databaseDriver.depositToWallet(selectedClient.getPayeeAddress(), amount);\n\n        if (success) {\n            System.out.println(\"Deposit successful: \" + amount + \" to \" + selectedClient);\n            amount_deposit.clear();\n            payee_list.getSelectionModel().clearSelection();\n        } else {\n            System.out.println(\"Deposit failed for: \" + selectedClient);\n        }\n    }\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758817598029,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Fix this:"
+                            },
+                            {
+                                "type": "codeBlock",
+                                "attrs": {
+                                    "language": "java"
+                                },
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "databaseDriver.searchClientsByPayeeAddress(searchText)"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "text": "Cannot resolve method 'searchClientsByPayeeAddress(String)'"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        }
+    ],
+    "isAgent": true,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false
+}
+}

@@ -1,0 +1,80 @@
+{
+    "checksum": "117e966eefc9bb1938504f58ace130de858a38d9cf35b5b306e7b19ddab4c9e1",
+    "data": {
+    "id": "aafbedef-f8e1-416b-bff7-2abac69e76ee",
+    "createdAt": 1758818624161,
+    "updatedAt": 1758818624174,
+    "title": "Fix this: (owner, accNumber, balance, creationD...",
+    "messages": [
+        {
+            "id": "19bf3591-3dc3-4ba8-9aeb-71952793f569",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Fix this:"
+                },
+                {
+                    "type": "codeSnippet",
+                    "text": "(owner, accNumber, balance, creationDate)",
+                    "language": "java"
+                },
+                {
+                    "type": "text",
+                    "text": "'WalletAccount(java.lang.String, java.lang.String, double, int)' in 'com.example.wealthwise.Models.WalletAccount' cannot be applied to '(java.lang.String, java.lang.String, double, java.time.LocalDate)'"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "C:\\Users\\ashis\\OneDrive\\Desktop\\wealthwise first_phase\\src\\main\\java\\com\\example\\wealthwise\\Models\\Model.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/wealthwise first_phase/src/main/java/com/example/wealthwise/Models/Model.java",
+                    "content": "package com.example.wealthwise.Models;\n\nimport com.example.wealthwise.Views.AccountType;\nimport com.example.wealthwise.Views.ViewFactory;\nimport javafx.application.Platform;\nimport javafx.scene.control.Alert;\nimport javafx.scene.control.Alert.AlertType;\nimport javafx.util.Duration;\nimport javafx.animation.PauseTransition;\n\nimport java.sql.ResultSet;\nimport java.sql.SQLException;\nimport java.time.LocalDate;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.Random;\nimport java.util.function.Consumer;\n\npublic class Model {\n    private static Model model;\n    private final ViewFactory viewFactory;\n    private final DatabaseDriver databaseDriver;\n    private final Client client;\n    private final Admin admin;\n    private AccountType loginAccountType = AccountType.CLIENT;\n    private boolean clientLoginSuccessFlag;\n    private boolean adminLoginSuccessFlag;\n    private Consumer<Client> clientCreatedListener;\n\n    private Model() {\n        this.viewFactory = new ViewFactory();\n        this.databaseDriver = new DatabaseDriver();\n        this.client = new Client(\"\", \"\", \"\", null, null, null);\n        this.admin = new Admin(\"\");\n    }\n\n    public static synchronized Model getInstance() {\n        if (model == null) {\n            model = new Model();\n        }\n        return model;\n    }\n\n    public ViewFactory getViewFactory() {\n        return viewFactory;\n    }\n\n    public DatabaseDriver getDatabaseDriver() {\n        return databaseDriver;\n    }\n\n    public AccountType getLoginAccountType() {\n        return loginAccountType;\n    }\n\n    public void setLoginAccountType(AccountType loginAccountType) {\n        this.loginAccountType = loginAccountType;\n    }\n\n    public boolean getClientLoginSuccessFlag() {\n        return clientLoginSuccessFlag;\n    }\n\n    public void setClientLoginSuccessFlag(boolean flag) {\n        this.clientLoginSuccessFlag = flag;\n    }\n\n    public Client getClient() {\n        return client;\n    }\n\n    public void evaluateClientCred(String pAddress, String password) {\n        try (ResultSet clientData = databaseDriver.getClientsData(pAddress, password)) {\n            if (clientData != null && clientData.next()) {\n                String firstName = clientData.getString(\"FirstName\");\n                String lastName = clientData.getString(\"LastName\");\n                String payeeAddress = clientData.getString(\"PayeeAddress\");\n                LocalDate date = LocalDate.parse(clientData.getString(\"Date\"));\n\n                // Load accounts\n                WalletAccount walletAccount = getWalletAccount(payeeAddress);\n                SavingsAccount savingsAccount = getSavingsAccount(payeeAddress);\n\n                // Set client properties\n                this.client.firstNameProperty().set(firstName);\n                this.client.lastNameProperty().set(lastName);\n                this.client.payeeAddressProperty().set(payeeAddress);\n                this.client.dateProperty().set(date);\n                this.client.walletAccountProperty().set(walletAccount);\n                this.client.savingsAccountProperty().set(savingsAccount);\n\n                this.clientLoginSuccessFlag = true;\n            } else {\n                this.clientLoginSuccessFlag = false;\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n            this.clientLoginSuccessFlag = false;\n        }\n    }\n\n    public boolean getAdminLoginSuccessFlag() {\n        return adminLoginSuccessFlag;\n    }\n\n    public void setAdminLoginSuccessFlag(boolean flag) {\n        this.adminLoginSuccessFlag = flag;\n    }\n\n    public void evaluateAdminCred(String username, String password) {\n        try (ResultSet adminData = databaseDriver.getAdminData(username, password)) {\n            if (adminData != null && adminData.next()) {\n                this.admin.usernameProperty().set(adminData.getString(\"Username\"));\n                this.adminLoginSuccessFlag = true;\n            } else {\n                this.adminLoginSuccessFlag = false;\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n            this.adminLoginSuccessFlag = false;\n        }\n    }\n\n    public List<Client> searchClients(String search) {\n        return databaseDriver.searchClients(search);\n    }\n\n    public boolean depositToWallet(String payeeAddress, double amount) {\n        return databaseDriver.depositToWallet(payeeAddress, amount);\n    }\n\n    public void createNewClient(String firstName, String lastName, String payeeAddress, String password) {\n        LocalDate creationDate = LocalDate.now();\n        databaseDriver.createClient(firstName, lastName, payeeAddress, password, creationDate);\n\n        String walletAccountNumber = generateAccountNumber();\n        databaseDriver.createWalletAccount(payeeAddress, walletAccountNumber, 0.0, creationDate);\n\n        String savingsAccountNumber = generateAccountNumber();\n        databaseDriver.createSavingsAccount(payeeAddress, savingsAccountNumber, 0.0, creationDate);\n    }\n\n    private String generateAccountNumber() {\n        Random random = new Random();\n        StringBuilder accountNumber = new StringBuilder();\n        for (int i = 0; i < 10; i++) {\n            accountNumber.append(random.nextInt(10));\n        }\n        return accountNumber.toString();\n    }\n\n    public List<Client> getAllClients() {\n        List<Client> clients = new ArrayList<>();\n        try (ResultSet clientData = databaseDriver.getAllClientsData()) {\n            while (clientData != null && clientData.next()) {\n                String firstName = clientData.getString(\"FirstName\");\n                String lastName = clientData.getString(\"LastName\");\n                String payeeAddress = clientData.getString(\"PayeeAddress\");\n                LocalDate date = LocalDate.parse(clientData.getString(\"Date\"));\n\n                WalletAccount wallet = getWalletAccount(payeeAddress);\n                SavingsAccount savings = getSavingsAccount(payeeAddress);\n\n                clients.add(new Client(firstName, lastName, payeeAddress, wallet, savings, date));\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n        }\n        return clients;\n    }\n\n    private WalletAccount getWalletAccount(String owner) {\n        try (ResultSet accountData = databaseDriver.getWalletAccount(owner)) {\n            if (accountData != null && accountData.next()) {\n                String accNumber = accountData.getString(\"AccountNumber\");\n                double balance = accountData.getDouble(\"Balance\");\n                LocalDate creationDate = LocalDate.parse(accountData.getString(\"CreationDate\"));\n                return new WalletAccount(owner, accNumber, balance, creationDate);\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n        }\n        return null;\n    }\n\n    private SavingsAccount getSavingsAccount(String owner) {\n        try (ResultSet accountData = databaseDriver.getSavingsAccount(owner)) {\n            if (accountData != null && accountData.next()) {\n                String accNumber = accountData.getString(\"AccountNumber\");\n                double balance = accountData.getDouble(\"Balance\");\n                LocalDate creationDate = LocalDate.parse(accountData.getString(\"CreationDate\"));\n                return new SavingsAccount(owner, accNumber, balance, creationDate);\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n        }\n        return null;\n    }\n\n    public void deleteClient(String payeeAddress) {\n        databaseDriver.deleteClient(payeeAddress);\n        databaseDriver.deleteWalletAccount(payeeAddress);\n        databaseDriver.deleteSavingsAccount(payeeAddress);\n    }\n}",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758818624174,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "Fix this:"
+                            },
+                            {
+                                "type": "codeBlock",
+                                "attrs": {
+                                    "language": "java"
+                                },
+                                "content": [
+                                    {
+                                        "type": "text",
+                                        "text": "(owner, accNumber, balance, creationDate)"
+                                    }
+                                ]
+                            },
+                            {
+                                "type": "text",
+                                "text": "'WalletAccount(java.lang.String, java.lang.String, double, int)' in 'com.example.wealthwise.Models.WalletAccount' cannot be applied to '(java.lang.String, java.lang.String, double, java.time.LocalDate)'"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        }
+    ],
+    "isAgent": true,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false
+}
+}

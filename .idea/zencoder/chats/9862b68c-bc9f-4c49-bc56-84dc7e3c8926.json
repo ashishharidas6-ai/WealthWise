@@ -1,0 +1,83 @@
+{
+    "checksum": "65c961eeedd2bd44813eb31e40ecc4e891a928ae454e5f7a746f46b44d097722",
+    "data": {
+    "id": "9862b68c-bc9f-4c49-bc56-84dc7e3c8926",
+    "createdAt": 1758733990376,
+    "updatedAt": 1758733994500,
+    "title": "hello",
+    "messages": [
+        {
+            "id": "9bf0be30-bb6f-4fef-bbb6-0c6c42f347c2",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "hello"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Models/Model.java",
+                    "fsPath": "D:/wealthwise backup/src/main/java/com/example/wealthwise/Models/Model.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "package com.example.wealthwise.Models;\n\nimport com.example.wealthwise.Views.AccountType;\nimport com.example.wealthwise.Views.ViewFactory;\n\nimport java.sql.ResultSet;\nimport java.time.LocalDate;\n\npublic class Model {\n    private final ViewFactory viewFactory;\n    private static Model model;\n    private final DatabaseDriver databaseDriver;\n    private AccountType loginaccountType= AccountType.CLIENT;\n\n    public AccountType getLoginaccountType() {return loginaccountType;}\n    public void setLoginaccountType(AccountType loginaccountType){this.loginaccountType=loginaccountType;}\n    //Cient Data Section\n   private final Client client;\n   private Boolean clientLoginSuccessFlag;\n\n    //Admin Data Section\n\n\n    private Model(){\n        this.viewFactory = new ViewFactory();\n        this.databaseDriver= new DatabaseDriver();\n\n        //client Section\n        this.clientLoginSuccessFlag=false;\n        this.client=new Client(\"\",\"\",\"\",null,null,null);\n        //Admin Section\n\n    }\n    public static synchronized Model getInstance() {\n        if(model==null){\n            model=new Model();\n\n        }\n        return model;\n    }\n    public ViewFactory getViewFactory() {\n        return viewFactory;\n    }\n\n    public DatabaseDriver getDatabaseDriver(){return new DatabaseDriver();}\n\n    // cient Methods\n    public Boolean getClientLoginSuccessFlag() {return clientLoginSuccessFlag;}\n    public void setClientLoginSuccessFlag(Boolean Flag) {this.clientLoginSuccessFlag = Flag;}\n    public Client getClient() {return client;}\n\n    public void evaluateclientCred(String pAddress, String password){\n        WalletAccount walletAccount;\n        SavingsAccount savingsAccount;\n        ResultSet resultSet=this.databaseDriver.getClientData(pAddress,password);\n        try{\n           if(resultSet.isBeforeFirst()){\n               this.client.firstNameProperty().set(resultSet.getString(\"FirstName\"));\n               this.client.lastNameProperty().set(resultSet.getString(\"LastName\"));\n               this.client.payeeAddressProperty().set(resultSet.getString(\"PayeeAddress\"));\n               String[] dateParts= resultSet.getString(\"Date\").split(\"-\");\n               LocalDate date = LocalDate.of(Integer.parseInt(dateParts[0]),Integer.parseInt(dateParts[1]),Integer.parseInt(dateParts[2]));\n               this.client.dateProperty().set(date);\n               this.clientLoginSuccessFlag=true;\n\n\n           }\n        }\n        catch(Exception e){\n            e.printStackTrace();\n        }\n    }\n\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758733992358,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "hello"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "7e6bd810-fb66-43f1-a00c-142fa7152d28",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "",
+                    "title": "You've hit your plan usage limits",
+                    "actions": [
+                        {
+                            "type": "upgradePlan",
+                            "title": "Upgrade plan",
+                            "waitSeconds": 42833
+                        },
+                        {
+                            "type": "externalAction",
+                            "title": "Try Again",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1758733994499,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}

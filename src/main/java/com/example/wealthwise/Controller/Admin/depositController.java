@@ -9,6 +9,8 @@ import javafx.collections.ObservableList;
 import com.example.wealthwise.Models.Model;
 import com.example.wealthwise.Models.DatabaseDriver;
 import com.example.wealthwise.Models.Client;
+import com.example.wealthwise.Views.ClientCellFactory;
+import javafx.util.Callback;
 
 import java.net.URL;
 import java.util.List;
@@ -24,7 +26,7 @@ public class depositController implements Initializable {
     @FXML
     public TextField amount_deposit;
     @FXML
-    public Button deposit_btn;
+    public Button depositbtn_payee;
 
     private final ObservableList<Client> payeeObservableList = FXCollections.observableArrayList();
 
@@ -33,9 +35,10 @@ public class depositController implements Initializable {
         System.out.println("DepositController initialized successfully");
 
         payee_list.setItems(payeeObservableList);
+        payee_list.setCellFactory((Callback<ListView<Client>, ListCell<Client>>) new ClientCellFactory());
 
         search_btn_payee.setOnAction(event -> searchPayees());
-        deposit_btn.setOnAction(event -> depositAmount());
+        depositbtn_payee.setOnAction(event -> depositAmount());
     }
 
     private void searchPayees() {
@@ -48,7 +51,7 @@ public class depositController implements Initializable {
         DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();
         payeeObservableList.clear();
 
-        List<Client> clients = databaseDriver.searchClientsByPayeeAddress(searchText);
+        List<Client> clients = databaseDriver.searchClients(searchText);
         if (clients.isEmpty()) {
             System.out.println("No payees found for: " + searchText);
         } else {
@@ -82,7 +85,7 @@ public class depositController implements Initializable {
         }
 
         DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();
-        boolean success = databaseDriver.depositToWallet(selectedClient.getPayeeAddress(), amount);
+        boolean success = databaseDriver.depositToSavings(selectedClient.getPayeeAddress(), amount);
 
         if (success) {
             System.out.println("Deposit successful: " + amount + " to " + selectedClient);

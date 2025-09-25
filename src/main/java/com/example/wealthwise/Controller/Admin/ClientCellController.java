@@ -24,6 +24,10 @@ public class ClientCellController implements Initializable {
     @FXML
     public Label sav_acc_number;
     @FXML
+    public Label wallet_balance;
+    @FXML
+    public Label sav_balance;
+    @FXML
     public Button delete_btn;
 
     private final Client client;
@@ -58,19 +62,23 @@ public class ClientCellController implements Initializable {
                 pAddress_lbl.setText(payeeAddress != null ? payeeAddress : "N/A");
                 
                 // Set wallet account number
-                if (client.walletAccountProperty().get() != null && 
+                if (client.walletAccountProperty().get() != null &&
                     client.walletAccountProperty().get().accNumberProperty().get() != null) {
                     wallet_acc_number.setText(client.walletAccountProperty().get().accNumberProperty().get());
+                    wallet_balance.setText("$" + String.format("%.2f", client.walletAccountProperty().get().balanceProperty().get()));
                 } else {
                     wallet_acc_number.setText("N/A");
+                    wallet_balance.setText("N/A");
                 }
                 
                 // Set savings account number
-                if (client.savingsAccountProperty().get() != null && 
+                if (client.savingsAccountProperty().get() != null &&
                     client.savingsAccountProperty().get().accNumberProperty().get() != null) {
                     sav_acc_number.setText(client.savingsAccountProperty().get().accNumberProperty().get());
+                    sav_balance.setText("$" + String.format("%.2f", client.savingsAccountProperty().get().balanceProperty().get()));
                 } else {
                     sav_acc_number.setText("N/A");
+                    sav_balance.setText("N/A");
                 }
                 
                 // Format and set the date from database Date column
@@ -92,6 +100,8 @@ public class ClientCellController implements Initializable {
                 pAddress_lbl.setText("Error");
                 wallet_acc_number.setText("Error");
                 sav_acc_number.setText("Error");
+                wallet_balance.setText("Error");
+                sav_balance.setText("Error");
                 date_label.setText("Error");
             }
         } else {
@@ -101,6 +111,8 @@ public class ClientCellController implements Initializable {
             pAddress_lbl.setText("N/A");
             wallet_acc_number.setText("N/A");
             sav_acc_number.setText("N/A");
+            wallet_balance.setText("N/A");
+            sav_balance.setText("N/A");
             date_label.setText("N/A");
         }
     }
