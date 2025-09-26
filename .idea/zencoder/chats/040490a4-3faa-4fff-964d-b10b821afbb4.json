@@ -1,0 +1,118 @@
+{
+    "checksum": "9d680fa65b08856f69f4732c0f0d1a85f9d98c3ed622ac4541ae0f839153ad4e",
+    "data": {
+    "id": "040490a4-3faa-4fff-964d-b10b821afbb4",
+    "createdAt": 1758897482206,
+    "updatedAt": 1758902441820,
+    "title": "make all the dollor sign to indian rupee style",
+    "messages": [
+        {
+            "id": "7ce04847-b5c9-40cd-9d4c-dc315d0fee56",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "make all the dollor sign to indian rupee style"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Controller/Client/accountController.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise first_phase/src/main/java/com/example/wealthwise/Controller/Client/accountController.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "package com.example.wealthwise.Controller.Client;\nimport com.example.wealthwise.Models.Client;\nimport com.example.wealthwise.Models.Model;\nimport com.example.wealthwise.Models.SavingsAccount;\nimport com.example.wealthwise.Models.WalletAccount;\nimport javafx.collections.FXCollections;\nimport javafx.collections.ObservableList;\nimport javafx.fxml.Initializable;\nimport javafx.scene.control.*;\nimport javafx.scene.control.Alert.AlertType;\n\nimport java.net.URL;\nimport java.util.ResourceBundle;\npublic class accountController implements Initializable {\n\n    public Label acc_no;\n    public Label limit_sav;\n    public Label date_created;\n    public Label balance_sav;\n\n    public Label acc_no_wal;\n    public Label limit_wal;\n    public Label date_created_wal;\n    public Label balance_wal;\n\n    public TextField amount_to_wallet;\n    public Button transfer_to_wallet_btn;\n    public TextField amount_to_account;\n    public Button transfer_to_account_btn;\n\n\n    @Override\n    public void initialize(URL location, ResourceBundle resources) {\n        Client client = Model.getInstance().getLoggedInClient();\n        if (client != null) {\n            // Savings Account\n            if (client.getSavingsAccount() != null) {\n                acc_no.setText(client.getSavingsAccount().getAccNumber());\n                limit_sav.setText(\"₹\" + String.format(\"%.2f\", ((SavingsAccount) client.getSavingsAccount()).getWithdrawalLimit()));\n                date_created.setText(client.getSavingsAccount().getDateCreated());\n                balance_sav.setText(\"₹\" + String.format(\"%.2f\", client.getSavingsAccount().getBalance()));\n            }\n\n            // Wallet Account\n            if (client.getWalletAccount() != null) {\n                acc_no_wal.setText(client.getWalletAccount().getAccNumber());\n                limit_wal.setText(String.valueOf(((WalletAccount) client.getWalletAccount()).getTransactionLimit()));\n                date_created_wal.setText(client.getWalletAccount().getDateCreated());\n                balance_wal.setText(\"₹\" + String.format(\"%.2f\", client.getWalletAccount().getBalance()));\n            }\n        }\n    }\n\n\n\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758897482212,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "make all the dollor sign to indian rupee style"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "dcce0599-16d0-4c4d-8221-a14c786f429b",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "fix the dollor sign to rupees"
+                }
+            ],
+            "context": {
+                "attachedFiles": [
+                    {
+                        "path": "src/main/java/com/example/wealthwise/Controller/Admin/ClientCellController.java",
+                        "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise first_phase/src/main/java/com/example/wealthwise/Controller/Admin/ClientCellController.java",
+                        "sources": [
+                            "opened_tab"
+                        ],
+                        "content": "package com.example.wealthwise.Controller.Admin;\n\nimport com.example.wealthwise.Models.Client;\nimport javafx.fxml.FXML;\nimport javafx.fxml.Initializable;\nimport javafx.scene.control.Button;\nimport javafx.scene.control.Label;\n\nimport java.net.URL;\nimport java.time.format.DateTimeFormatter;\nimport java.util.ResourceBundle;\n\npublic class ClientCellController implements Initializable {\n    @FXML\n    public Label date_label;\n    @FXML\n    public Label fname_lbl;\n    @FXML\n    public Label lname_lbl;\n    @FXML\n    public Label pAddress_lbl;\n    @FXML\n    public Label wallet_acc_number;\n    @FXML\n    public Label sav_acc_number;\n    @FXML\n    public Label wallet_balance;\n    @FXML\n    public Label sav_balance;\n    @FXML\n    public Button delete_btn;\n\n    private final Client client;\n\n    public ClientCellController(Client client){\n        this.client = client;\n    }\n\n    @Override\n    public void initialize(URL url, ResourceBundle resourceBundle) {\n        if (client != null) {\n            try {\n                // Set client information from database columns (FirstName, LastName, PayeeAddress)\n                String firstName = client.firstNameProperty().get();\n                String lastName = client.lastNameProperty().get();\n                String payeeAddress = client.payeeAddressProperty().get();\n                \n                // Debug: Print the client data being displayed\n                System.out.println(\"=== ClientCellController Debug ===\");\n                System.out.println(\"Client object: \" + (client != null ? \"NOT NULL\" : \"NULL\"));\n                System.out.println(\"FirstName: '\" + firstName + \"'\");\n                System.out.println(\"LastName: '\" + lastName + \"'\");\n                System.out.println(\"PayeeAddress: '\" + payeeAddress + \"'\");\n                System.out.println(\"WalletAccount: \" + (client.walletAccountProperty().get() != null ? \"NOT NULL\" : \"NULL\"));\n                System.out.println(\"SavingsAccount: \" + (client.savingsAccountProperty().get() != null ? \"NOT NULL\" : \"NULL\"));\n                System.out.println(\"Date: \" + (client.dateProperty().get() != null ? client.dateProperty().get().toString() : \"NULL\"));\n                System.out.println(\"=== End Debug ===\");\n                \n                // Display client information in labels\n                fname_lbl.setText(firstName != null ? firstName : \"N/A\");\n                lname_lbl.setText(lastName != null ? lastName : \"N/A\");\n                pAddress_lbl.setText(payeeAddress != null ? payeeAddress : \"N/A\");\n                \n                // Set wallet account number\n                if (client.walletAccountProperty().get() != null &&\n                    client.walletAccountProperty().get().accNumberProperty().get() != null) {\n                    wallet_acc_number.setText(client.walletAccountProperty().get().accNumberProperty().get());\n                    wallet_balance.setText(\"₹\" + String.format(\"%.2f\", client.walletAccountProperty().get().balanceProperty().get()));\n                } else {\n                    wallet_acc_number.setText(\"N/A\");\n                    wallet_balance.setText(\"N/A\");\n                }\n                \n                // Set savings account number\n                if (client.savingsAccountProperty().get() != null &&\n                    client.savingsAccountProperty().get().accNumberProperty().get() != null) {\n                    sav_acc_number.setText(client.savingsAccountProperty().get().accNumberProperty().get());\n                    sav_balance.setText(\"₹\" + String.format(\"%.2f\", client.savingsAccountProperty().get().balanceProperty().get()));\n                } else {\n                    sav_acc_number.setText(\"N/A\");\n                    sav_balance.setText(\"N/A\");\n                }\n                \n                // Format and set the date from database Date column\n                if (client.dateProperty().get() != null) {\n                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(\"dd-MM-yyyy\");\n                    date_label.setText(client.dateProperty().get().format(formatter));\n                } else {\n                    date_label.setText(\"N/A\");\n                }\n                \n                // Set up delete button action (optional - for future implementation)\n                delete_btn.setOnAction(event -> onDeleteClient());\n                \n            } catch (Exception e) {\n                e.printStackTrace();\n                // Set default values if there's an error\n                fname_lbl.setText(\"Error\");\n                lname_lbl.setText(\"Error\");\n                pAddress_lbl.setText(\"Error\");\n                wallet_acc_number.setText(\"Error\");\n                sav_acc_number.setText(\"Error\");\n                wallet_balance.setText(\"Error\");\n                sav_balance.setText(\"Error\");\n                date_label.setText(\"Error\");\n            }\n        } else {\n            // Handle null client case\n            fname_lbl.setText(\"N/A\");\n            lname_lbl.setText(\"N/A\");\n            pAddress_lbl.setText(\"N/A\");\n            wallet_acc_number.setText(\"N/A\");\n            sav_acc_number.setText(\"N/A\");\n            wallet_balance.setText(\"N/A\");\n            sav_balance.setText(\"N/A\");\n            date_label.setText(\"N/A\");\n        }\n    }\n    \n    private void onDeleteClient() {\n        if (client != null) {\n            try {\n                String clientName = client.firstNameProperty().get() + \" \" + client.lastNameProperty().get();\n                String clientPayeeAddress = client.payeeAddressProperty().get();\n                // Assuming id is an Integer type\n                String clientWalletAccountNumber = client.walletAccountProperty().get().accNumberProperty().get();\n                Double clientWalletBalance = client.walletAccountProperty().get().balanceProperty().get();\n                // Add more fields as needed\n                // ...\n                String clientSavingsAccountNumber = client.savingsAccountProperty().get().accNumberProperty().get();\n                Double clientSavingsBalance = client.savingsAccountProperty().get().balanceProperty().get();\n\n                \n                System.out.println(\"Delete button clicked for client: \" + clientName + \" (\" + clientPayeeAddress + \")\");\n                \n                // Show confirmation dialog\n                javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);\n                alert.setTitle(\"Delete Client\");\n                alert.setHeaderText(\"Delete Client: \" + clientName);\n                alert.setContentText(\"Are you sure you want to delete this client?\\n\\n\" +\n                                   \"This will permanently remove:\\n\" +\n                                   \"• Client account: \" + clientName + \"\\n\" +\n                                   \"• PayeeAddress: \" + clientPayeeAddress + \"\\n\" +\n                                   \"• Wallet account\\n\" + \"• Wallet balance: $\" + clientWalletBalance + \"\\n\" +\n                        \"• Savings balance: $\" + clientSavingsBalance + \"\\n\" +\n                        \"• All associated transactions\\n\" +\n                                   \"• Savings account\\n\\n\" +\n                                   \"This action cannot be undone.\");\n                \n                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();\n                \n                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.OK) {\n                    // User confirmed deletion\n                    System.out.println(\"User confirmed deletion of client: \" + clientName);\n                    \n                    // Delete client from database\n                    com.example.wealthwise.Models.Model model = com.example.wealthwise.Models.Model.getInstance();\n                    boolean deleted = model.deleteClient(client);\n                    \n                    if (deleted) {\n                        // Show success message\n                        javafx.scene.control.Alert successAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);\n                        successAlert.setTitle(\"Client Deleted\");\n                        successAlert.setHeaderText(\"Success\");\n                        successAlert.setContentText(\"Client \" + clientName + \" has been successfully deleted.\");\n                        successAlert.showAndWait();\n                        \n                        System.out.println(\"Client \" + clientName + \" deleted successfully\");\n                    } else {\n                        // Show error message\n                        javafx.scene.control.Alert errorAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);\n                        errorAlert.setTitle(\"Deletion Failed\");\n                        errorAlert.setHeaderText(\"Error\");\n                        errorAlert.setContentText(\"Failed to delete client \" + clientName + \".\\nPlease try again or contact system administrator.\");\n                        errorAlert.showAndWait();\n                        \n                        System.err.println(\"Failed to delete client \" + clientName);\n                    }\n                } else {\n                    System.out.println(\"User cancelled deletion of client: \" + clientName);\n                }\n                \n            } catch (Exception e) {\n                System.err.println(\"Error in delete client operation:\");\n                e.printStackTrace();\n                \n                // Show error dialog\n                javafx.scene.control.Alert errorAlert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.ERROR);\n                errorAlert.setTitle(\"System Error\");\n                errorAlert.setHeaderText(\"Unexpected Error\");\n                errorAlert.setContentText(\"An unexpected error occurred while deleting the client.\\nError: \" + e.getMessage());\n                errorAlert.showAndWait();\n            }\n        }\n    }\n}\n",
+                        "language": "java"
+                    },
+                    {
+                        "path": "src/main/java/com/example/wealthwise/Controller/Client/accountController.java",
+                        "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise first_phase/src/main/java/com/example/wealthwise/Controller/Client/accountController.java",
+                        "sources": [
+                            "opened_tab"
+                        ],
+                        "content": "package com.example.wealthwise.Controller.Client;\nimport com.example.wealthwise.Models.Client;\nimport com.example.wealthwise.Models.Model;\nimport com.example.wealthwise.Models.SavingsAccount;\nimport com.example.wealthwise.Models.WalletAccount;\nimport javafx.collections.FXCollections;\nimport javafx.collections.ObservableList;\nimport javafx.fxml.Initializable;\nimport javafx.scene.control.*;\nimport javafx.scene.control.Alert.AlertType;\n\nimport java.net.URL;\nimport java.util.ResourceBundle;\npublic class accountController implements Initializable {\n\n    public Label acc_no;\n    public Label limit_sav;\n    public Label date_created;\n    public Label balance_sav;\n\n    public Label acc_no_wal;\n    public Label limit_wal;\n    public Label date_created_wal;\n    public Label balance_wal;\n\n    public TextField amount_to_wallet;\n    public Button transfer_to_wallet_btn;\n    public TextField amount_to_account;\n    public Button transfer_to_account_btn;\n\n\n    @Override\n    public void initialize(URL location, ResourceBundle resources) {\n        Client client = Model.getInstance().getLoggedInClient();\n        if (client != null) {\n            // Savings Account\n            if (client.getSavingsAccount() != null) {\n                acc_no.setText(client.getSavingsAccount().getAccNumber());\n                limit_sav.setText(\"₹\" + String.format(\"%.2f\", ((SavingsAccount) client.getSavingsAccount()).getWithdrawalLimit()));\n                date_created.setText(client.getSavingsAccount().getDateCreated());\n                balance_sav.setText(\"₹\" + String.format(\"%.2f\", client.getSavingsAccount().getBalance()));\n            }\n\n            // Wallet Account\n            if (client.getWalletAccount() != null) {\n                acc_no_wal.setText(client.getWalletAccount().getAccNumber());\n                limit_wal.setText(String.valueOf(((WalletAccount) client.getWalletAccount()).getTransactionLimit()));\n                date_created_wal.setText(client.getWalletAccount().getDateCreated());\n                balance_wal.setText(\"₹\" + String.format(\"%.2f\", client.getWalletAccount().getBalance()));\n            }\n        }\n    }\n\n\n\n}\n",
+                        "language": "java"
+                    }
+                ],
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Controller/Client/DashboardController.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise first_phase/src/main/java/com/example/wealthwise/Controller/Client/DashboardController.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "package com.example.wealthwise.Controller.Client;\n\nimport com.example.wealthwise.Models.Client;\nimport com.example.wealthwise.Models.Model;\nimport javafx.fxml.Initializable;\nimport javafx.scene.control.*;\nimport javafx.scene.text.Text;\n\nimport java.time.LocalDate;\nimport java.time.format.DateTimeFormatter;\nimport java.util.ResourceBundle;\nimport java.net.URL;\n\npublic class DashboardController implements Initializable{\n    public Text user_name;\n    public Label login_date;\n\n    public Label checking_acc_bal;\n    public Label checking_acc_num;\n    public Label saving_acc_bal;\n    public Label saving_acc_num;\n    public Label income_lbl;\n    public Label expense_lbl;\n    public ListView transaction_listview;\n    public TextField payee_fld;\n    public TextField amount_fld;\n    public TextArea message_fld;\n    public Button send_money_btn;\n\n    @Override\n    public void initialize(URL url, ResourceBundle resourceBundle) {\n        Client client = Model.getInstance().getLoggedInClient();\n        if (client != null) {\n            user_name.setText(client.getFirstName() + \" \" + client.getLastName());\n            login_date.setText(LocalDate.now().format(DateTimeFormatter.ofPattern(\"yyyy-MM-dd\")));\n\n            // Wallet Account\n            if (client.getWalletAccount() != null) {\n                checking_acc_num.setText(client.getWalletAccount().getAccNumber());\n                checking_acc_bal.setText(\"₹\" + String.format(\"%.2f\", client.getWalletAccount().getBalance()));\n            }\n\n            // Savings Account\n            if (client.getSavingsAccount() != null) {\n                saving_acc_num.setText(client.getSavingsAccount().getAccNumber());\n                saving_acc_bal.setText(\"₹\" + String.format(\"%.2f\", client.getSavingsAccount().getBalance()));\n            }\n\n            // Income and Expense - placeholder for now, can be calculated from transactions later\n            income_lbl.setText(\"₹0.00\");\n            expense_lbl.setText(\"₹0.00\");\n        }\n    }\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1758902441820,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "fix the dollor sign to rupees"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        }
+    ],
+    "isAgent": true,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}
