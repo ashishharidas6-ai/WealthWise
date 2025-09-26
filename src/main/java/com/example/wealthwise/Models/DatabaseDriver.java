@@ -11,6 +11,12 @@ public class DatabaseDriver {
     public DatabaseDriver() {
         try {
             this.conn = DriverManager.getConnection("jdbc:sqlite:mazebank.db");
+
+            // Enable foreign key enforcement for SQLite (affects new tables and FK behavior)
+            try (Statement pragma = conn.createStatement()) {
+                pragma.execute("PRAGMA foreign_keys = ON");
+            }
+
             createTablesIfNotExist();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -19,106 +25,104 @@ public class DatabaseDriver {
 
     private void createTablesIfNotExist() {
         try (Statement statement = conn.createStatement()) {
-            // Create Clients table
+            // Clients
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS Clients (" +
-                "FirstName TEXT NOT NULL, " +
-                "LastName TEXT NOT NULL, " +
-                "PayeeAddress TEXT NOT NULL UNIQUE, " +
-                "Password TEXT NOT NULL, " +
-                "Date TEXT NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS Clients (" +
+                            "FirstName TEXT NOT NULL, " +
+                            "LastName TEXT NOT NULL, " +
+                            "PayeeAddress TEXT NOT NULL UNIQUE, " +
+                            "Password TEXT NOT NULL, " +
+                            "Date TEXT NOT NULL)"
             );
 
-            // Create WalletAccounts table
+            // WalletAccounts with FK -> Clients (ON DELETE CASCADE for future DBs)
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS WalletAccounts (" +
-                "Owner TEXT NOT NULL, " +
-                "AccountNumber TEXT NOT NULL UNIQUE, " +
-                "Balance REAL NOT NULL DEFAULT 0.0, " +
-                "CreationDate TEXT NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS WalletAccounts (" +
+                            "Owner TEXT NOT NULL, " +
+                            "AccountNumber TEXT NOT NULL UNIQUE, " +
+                            "Balance REAL NOT NULL DEFAULT 0.0, " +
+                            "CreationDate TEXT NOT NULL, " +
+                            "FOREIGN KEY(Owner) REFERENCES Clients(PayeeAddress) ON DELETE CASCADE)"
             );
 
-            // Create SavingsAccounts table
+            // SavingsAccount with FK -> Clients (ON DELETE CASCADE for future DBs)
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS SavingsAccounts (" +
-                "Owner TEXT NOT NULL, " +
-                "AccountNumber TEXT NOT NULL UNIQUE, " +
-                "Balance REAL NOT NULL DEFAULT 0.0, " +
-                "CreationDate TEXT NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS SavingsAccount (" +
+                            "Owner TEXT NOT NULL, " +
+                            "AccountNumber TEXT NOT NULL UNIQUE, " +
+                            "Balance REAL NOT NULL DEFAULT 0.0, " +
+                            "CreationDate TEXT NOT NULL, " +
+                            "FOREIGN KEY(Owner) REFERENCES Clients(PayeeAddress) ON DELETE CASCADE)"
             );
 
-            // Create Admine table
+            // Admins
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS Admine (" +
-                "Username TEXT NOT NULL UNIQUE, " +
-                "Password TEXT NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS Admins (" +
+                            "Username TEXT NOT NULL UNIQUE, " +
+                            "Password TEXT NOT NULL)"
             );
 
-            // Create Transactions table
+            // Transactions (kept without FK so history is preserved; you can change if desired)
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS Transactions (" +
-                "Sender TEXT NOT NULL, " +
-                "Receiver TEXT NOT NULL, " +
-                "Amount REAL NOT NULL, " +
-                "Message TEXT)"
+                    "CREATE TABLE IF NOT EXISTS Transactions (" +
+                            "Sender TEXT NOT NULL, " +
+                            "Receiver TEXT NOT NULL, " +
+                            "Amount REAL NOT NULL, " +
+                            "Message TEXT, " +
+                            "Date TEXT NOT NULL)"
             );
 
-            // Create Budgets table
+            // Budgets with FK -> Clients (ON DELETE CASCADE for future DBs)
             statement.execute(
-                "CREATE TABLE IF NOT EXISTS Budgets (" +
-                "Owner TEXT NOT NULL, " +
-                "BudgetName TEXT NOT NULL, " +
-                "BudgetAmount REAL NOT NULL, " +
-                "BudgetSpent REAL NOT NULL DEFAULT 0.0, " +
-                "CreationDate TEXT NOT NULL)"
+                    "CREATE TABLE IF NOT EXISTS Budgets (" +
+                            "Owner TEXT NOT NULL, " +
+                            "BudgetName TEXT NOT NULL, " +
+                            "BudgetAmount REAL NOT NULL, " +
+                            "BudgetSpent REAL NOT NULL DEFAULT 0.0, " +
+                            "CreationDate TEXT NOT NULL, " +
+                            "FOREIGN KEY(Owner) REFERENCES Clients(PayeeAddress) ON DELETE CASCADE)"
             );
 
-            // Insert sample admin if not exists
+            // Insert sample admin
             statement.execute(
-                "INSERT OR IGNORE INTO Admine (Username, Password) " +
-                "VALUES ('admin', 'admin123')"
+                    "INSERT OR IGNORE INTO Admins (Username, Password) " +
+                            "VALUES ('admin', 'admin123')"
             );
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    /*
-     *Client Section
-     */
+    /* =====================
+       Client Section
+    ====================== */
+
     public ResultSet getClientsData(String pAddress, String password) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = this.conn.prepareStatement("SELECT * FROM Clients WHERE PayeeAddress = ? AND Password = ?");
+            PreparedStatement statement = conn.prepareStatement(
+                    "SELECT * FROM Clients WHERE PayeeAddress = ? AND Password = ?");
             statement.setString(1, pAddress);
             statement.setString(2, password);
-            resultSet = statement.executeQuery();
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public ResultSet getAllClientsData() {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = this.conn.prepareStatement("SELECT * FROM Clients");
-            resultSet = statement.executeQuery();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM Clients");
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public void createClient(String fName, String lName, String pAddress, String password, LocalDate date) {
-        PreparedStatement statement;
-        try {
-            statement = this.conn.prepareStatement("INSERT INTO " +
-                    "Clients (FirstName, LastName, PayeeAddress, Password, Date)" +
-                    "VALUES (?, ?, ?, ?, ?);");
+        String sql = "INSERT INTO Clients (FirstName, LastName, PayeeAddress, Password, Date) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, fName);
             statement.setString(2, lName);
             statement.setString(3, pAddress);
@@ -131,13 +135,13 @@ public class DatabaseDriver {
     }
 
     public void createWalletAccount(String owner, String accNum, double balance, LocalDate creationDate) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("INSERT INTO WalletAccounts (Owner, AccountNumber, Balance, CreationDate) VALUES (?, ?, ?, ?)");
+        String sql = "INSERT INTO WalletAccount (owner, account_number, transaction_limit, balance, date_created) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, owner);
             statement.setString(2, accNum);
-            statement.setDouble(3, balance);
-            statement.setString(4, creationDate.toString());
+            statement.setInt(3, 1000); // default transaction limit
+            statement.setDouble(4, balance);
+            statement.setString(5, creationDate.toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -145,13 +149,13 @@ public class DatabaseDriver {
     }
 
     public void createSavingsAccount(String owner, String accNum, double balance, LocalDate creationDate) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("INSERT INTO SavingsAccounts (Owner, AccountNumber, Balance, CreationDate) VALUES (?, ?, ?, ?)");
+        String sql = "INSERT INTO SavingsAccount (owner, account_number, transaction_limit, balance, date_created) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, owner);
             statement.setString(2, accNum);
-            statement.setDouble(3, balance);
-            statement.setString(4, creationDate.toString());
+            statement.setDouble(3, 500.0); // default withdrawal limit
+            statement.setDouble(4, balance);
+            statement.setString(5, creationDate.toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -159,35 +163,32 @@ public class DatabaseDriver {
     }
 
     public ResultSet getWalletAccount(String owner) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = conn.prepareStatement("SELECT * FROM WalletAccounts WHERE Owner = ?");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM WalletAccount WHERE owner = ?");
             statement.setString(1, owner);
-            resultSet = statement.executeQuery();
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public ResultSet getSavingsAccount(String owner) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = conn.prepareStatement("SELECT * FROM SavingsAccounts WHERE Owner = ?");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM SavingsAccount WHERE owner = ?");
             statement.setString(1, owner);
-            resultSet = statement.executeQuery();
+            ResultSet rs = statement.executeQuery();
+            System.out.println("Get Savings Account: owner=" + owner);
+            return rs;
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public void updateClientData(String pAddress, String fName, String lName, String password) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("UPDATE Clients SET FirstName = ?, LastName = ?, Password = ? WHERE PayeeAddress = ?");
+        String sql = "UPDATE Clients SET FirstName = ?, LastName = ?, Password = ? WHERE PayeeAddress = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, fName);
             statement.setString(2, lName);
             statement.setString(3, password);
@@ -199,9 +200,8 @@ public class DatabaseDriver {
     }
 
     public void updateWalletBalance(String pAddress, double balance) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("UPDATE WalletAccounts SET Balance = ? WHERE Owner = ?");
+        String sql = "UPDATE WalletAccounts SET Balance = ? WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setDouble(1, balance);
             statement.setString(2, pAddress);
             statement.executeUpdate();
@@ -210,33 +210,86 @@ public class DatabaseDriver {
         }
     }
 
-    public void updateSavingsBalance(String pAddress, double balance) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("UPDATE SavingsAccounts SET Balance = ? WHERE Owner = ?");
-            statement.setDouble(1, balance);
-            statement.setString(2, pAddress);
-            statement.executeUpdate();
+    public boolean updateSavingsBalance(String pAddress, double balance) {
+        // First check if row exists
+        String checkSql = "SELECT COUNT(*) FROM SavingsAccount WHERE Owner = ?";
+        try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
+            checkStmt.setString(1, pAddress);
+            ResultSet rs = checkStmt.executeQuery();
+            int count = rs.next() ? rs.getInt(1) : 0;
+            System.out.println("Check Savings Account exists: pAddress=" + pAddress + ", count=" + count);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        String sql = "UPDATE SavingsAccount SET Balance = ? WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setDouble(1, balance);
+            statement.setString(2, pAddress);
+            int rowsAffected = statement.executeUpdate();
+            System.out.println("Update Savings Balance: pAddress=" + pAddress + ", balance=" + balance + ", rowsAffected=" + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
+    // ---------- FIXED deleteClient: delete dependent rows first (wallets, savings, budgets, transactions) ----------
     public void deleteClient(String pAddress) {
-        PreparedStatement statement;
+        String deleteWallets = "DELETE FROM WalletAccounts WHERE Owner = ?";
+        String deleteSavings = "DELETE FROM SavingsAccount WHERE Owner = ?";
+        String deleteBudgets = "DELETE FROM Budgets WHERE Owner = ?";
+        String deleteTransactions = "DELETE FROM Transactions WHERE Sender = ? OR Receiver = ?";
+        String deleteClient = "DELETE FROM Clients WHERE PayeeAddress = ?";
+
         try {
-            statement = conn.prepareStatement("DELETE FROM Clients WHERE PayeeAddress = ?");
-            statement.setString(1, pAddress);
-            statement.executeUpdate();
+            // start transaction
+            conn.setAutoCommit(false);
+
+            try (PreparedStatement stWallet = conn.prepareStatement(deleteWallets);
+                 PreparedStatement stSavings = conn.prepareStatement(deleteSavings);
+                 PreparedStatement stBudgets = conn.prepareStatement(deleteBudgets);
+                 PreparedStatement stTrans = conn.prepareStatement(deleteTransactions);
+                 PreparedStatement stClient = conn.prepareStatement(deleteClient)) {
+
+                stWallet.setString(1, pAddress);
+                stWallet.executeUpdate();
+
+                stSavings.setString(1, pAddress);
+                stSavings.executeUpdate();
+
+                stBudgets.setString(1, pAddress);
+                stBudgets.executeUpdate();
+
+                stTrans.setString(1, pAddress);
+                stTrans.setString(2, pAddress);
+                stTrans.executeUpdate();
+
+                stClient.setString(1, pAddress);
+                int rowsDeleted = stClient.executeUpdate();
+
+                conn.commit();
+
+                if (rowsDeleted == 0) {
+                    System.out.println("deleteClient: no client found with PayeeAddress = " + pAddress);
+                } else {
+                    System.out.println("deleteClient: removed client and related records for " + pAddress);
+                }
+            } catch (SQLException ex) {
+                conn.rollback();
+                throw ex;
+            } finally {
+                conn.setAutoCommit(true);
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void deleteWalletAccount(String pAddress) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("DELETE FROM WalletAccounts WHERE Owner = ?");
+        String sql = "DELETE FROM WalletAccounts WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, pAddress);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -245,9 +298,8 @@ public class DatabaseDriver {
     }
 
     public void deleteSavingsAccount(String pAddress) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("DELETE FROM SavingsAccounts WHERE Owner = ?");
+        String sql = "DELETE FROM SavingsAccount WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, pAddress);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -256,43 +308,41 @@ public class DatabaseDriver {
     }
 
     public ResultSet searchClient(String pAddress) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = conn.prepareStatement("SELECT * FROM Clients WHERE PayeeAddress = ?");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM Clients WHERE PayeeAddress = ?");
             statement.setString(1, pAddress);
-            resultSet = statement.executeQuery();
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
-    /*
-     *Admin Section
-     */
+    /* =====================
+       Admin Section
+    ====================== */
+
     public ResultSet getAdminData(String username, String password) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = this.conn.prepareStatement("SELECT * FROM Admins WHERE Username = ? AND Password = ?");
+            PreparedStatement statement = conn.prepareStatement(
+                    "SELECT * FROM Admins WHERE Username = ? AND Password = ?");
             statement.setString(1, username);
             statement.setString(2, password);
-            resultSet = statement.executeQuery();
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public void createTransaction(String sender, String receiver, double amount, String message) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("INSERT INTO Transactions (Sender, Receiver, Amount, Message) VALUES (?, ?, ?, ?)");
+        String sql = "INSERT INTO Transactions (Sender, Receiver, Amount, Message, Date) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, sender);
             statement.setString(2, receiver);
             statement.setDouble(3, amount);
             statement.setString(4, message);
+            statement.setString(5, LocalDate.now().toString());
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -300,21 +350,22 @@ public class DatabaseDriver {
     }
 
     public ResultSet getAllTransactions() {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = conn.prepareStatement("SELECT * FROM Transactions");
-            resultSet = statement.executeQuery();
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM Transactions");
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
+    /* =====================
+       Budgets Section
+    ====================== */
+
     public void addBudget(String owner, String budgetName, double budgetAmount, double budgetSpent, LocalDate creationDate) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("INSERT INTO Budgets (Owner, BudgetName, BudgetAmount, BudgetSpent, CreationDate) VALUES (?, ?, ?, ?, ?)");
+        String sql = "INSERT INTO Budgets (Owner, BudgetName, BudgetAmount, BudgetSpent, CreationDate) VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, owner);
             statement.setString(2, budgetName);
             statement.setDouble(3, budgetAmount);
@@ -327,22 +378,19 @@ public class DatabaseDriver {
     }
 
     public ResultSet getBudgets(String owner) {
-        PreparedStatement statement;
-        ResultSet resultSet = null;
         try {
-            statement = conn.prepareStatement("SELECT * FROM Budgets WHERE Owner = ?");
+            PreparedStatement statement = conn.prepareStatement("SELECT * FROM Budgets WHERE Owner = ?");
             statement.setString(1, owner);
-            resultSet = statement.executeQuery();
+            return statement.executeQuery();
         } catch (SQLException e) {
             e.printStackTrace();
+            return null;
         }
-        return resultSet;
     }
 
     public void updateBudget(String owner, String budgetName, double budgetAmount, double budgetSpent) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("UPDATE Budgets SET BudgetAmount = ?, BudgetSpent = ? WHERE Owner = ? AND BudgetName = ?");
+        String sql = "UPDATE Budgets SET BudgetAmount = ?, BudgetSpent = ? WHERE Owner = ? AND BudgetName = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setDouble(1, budgetAmount);
             statement.setDouble(2, budgetSpent);
             statement.setString(3, owner);
@@ -354,9 +402,8 @@ public class DatabaseDriver {
     }
 
     public void deleteBudget(String owner, String budgetName) {
-        PreparedStatement statement;
-        try {
-            statement = conn.prepareStatement("DELETE FROM Budgets WHERE Owner = ? AND BudgetName = ?");
+        String sql = "DELETE FROM Budgets WHERE Owner = ? AND BudgetName = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
             statement.setString(1, owner);
             statement.setString(2, budgetName);
             statement.executeUpdate();
@@ -365,28 +412,48 @@ public class DatabaseDriver {
         }
     }
 
+    /* =====================
+       Search Clients
+    ====================== */
+
     public List<Client> searchClients(String search) {
         List<Client> clients = new ArrayList<>();
-        try {
-            String query = "SELECT c.FirstName, c.LastName, c.PayeeAddress, c.Date, wa.AccountNumber AS WalletAccountNumber, wa.Balance AS WalletBalance, sa.AccountNumber AS SavingsAccountNumber, sa.Balance AS SavingsBalance " +
-                    "FROM Clients c " +
-                    "LEFT JOIN WalletAccounts wa ON c.PayeeAddress = wa.Owner " +
-                    "LEFT JOIN SavingsAccounts sa ON c.PayeeAddress = sa.Owner " +
-                    "WHERE c.PayeeAddress LIKE ? OR c.FirstName LIKE ? OR c.LastName LIKE ?";
-            PreparedStatement statement = conn.prepareStatement(query);
+        String query =
+                "SELECT c.FirstName, c.LastName, c.PayeeAddress, c.Date, " +
+                        "wa.AccountNumber AS WalletAccountNumber, wa.Balance AS WalletBalance, wa.CreationDate AS WalletCreationDate, " +
+                        "sa.AccountNumber AS SavingsAccountNumber, sa.Balance AS SavingsBalance, sa.CreationDate AS SavingsCreationDate " +
+                        "FROM Clients c " +
+                        "LEFT JOIN WalletAccounts wa ON c.PayeeAddress = wa.Owner " +
+                        "LEFT JOIN SavingsAccounts sa ON c.PayeeAddress = sa.Owner " +
+                        "WHERE c.PayeeAddress LIKE ? OR c.FirstName LIKE ? OR c.LastName LIKE ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             String searchPattern = "%" + search + "%";
             statement.setString(1, searchPattern);
             statement.setString(2, searchPattern);
             statement.setString(3, searchPattern);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String fName = resultSet.getString("FirstName");
-                String lName = resultSet.getString("LastName");
-                String pAddress = resultSet.getString("PayeeAddress");
-                LocalDate date = LocalDate.parse(resultSet.getString("Date"));
-                WalletAccount wallet = new WalletAccount(pAddress, resultSet.getString("WalletAccountNumber"), resultSet.getDouble("WalletBalance"), (int) 1000.0);
-                SavingsAccount savings = new SavingsAccount(pAddress, resultSet.getString("SavingsAccountNumber"), resultSet.getDouble("SavingsBalance"), 500.0);
-                clients.add(new Client(fName, lName, pAddress, wallet, savings, date));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    String fName = resultSet.getString("FirstName");
+                    String lName = resultSet.getString("LastName");
+                    String pAddress = resultSet.getString("PayeeAddress");
+                    LocalDate date = LocalDate.parse(resultSet.getString("Date"));
+
+                    WalletAccount wallet = new WalletAccount(
+                            pAddress,
+                            resultSet.getString("WalletAccountNumber"),
+                            resultSet.getDouble("WalletBalance"),
+                            1000,
+                            resultSet.getString("WalletCreationDate")
+                    );
+                    SavingsAccount savings = new SavingsAccount(
+                            pAddress,
+                            resultSet.getString("SavingsAccountNumber"),
+                            resultSet.getDouble("SavingsBalance"),
+                            500,
+                            resultSet.getString("SavingsCreationDate")
+                    );
+                    clients.add(new Client(fName, lName, pAddress, wallet, savings, date));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -395,13 +462,11 @@ public class DatabaseDriver {
     }
 
     public boolean depositToWallet(String payeeAddress, double amount) {
-        try {
-            String query = "UPDATE WalletAccounts SET Balance = Balance + ? WHERE Owner = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
+        String query = "UPDATE WalletAccounts SET Balance = Balance + ? WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setDouble(1, amount);
             statement.setString(2, payeeAddress);
-            int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -409,13 +474,11 @@ public class DatabaseDriver {
     }
 
     public boolean depositToSavings(String payeeAddress, double amount) {
-        try {
-            String query = "UPDATE SavingsAccounts SET Balance = Balance + ? WHERE Owner = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
+        String query = "UPDATE SavingsAccounts SET Balance = Balance + ? WHERE Owner = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setDouble(1, amount);
             statement.setString(2, payeeAddress);
-            int rowsUpdated = statement.executeUpdate();
-            return rowsUpdated > 0;
+            return statement.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
@@ -424,27 +487,81 @@ public class DatabaseDriver {
 
     public List<Client> searchClientsByPayeeAddress(String payeeAddress) {
         List<Client> clients = new ArrayList<>();
-        try {
-            String query = "SELECT c.FirstName, c.LastName, c.PayeeAddress, c.Date, wa.AccountNumber AS WalletAccountNumber, wa.Balance AS WalletBalance, sa.AccountNumber AS SavingsAccountNumber, sa.Balance AS SavingsBalance " +
-                    "FROM Clients c " +
-                    "LEFT JOIN WalletAccounts wa ON c.PayeeAddress = wa.Owner " +
-                    "LEFT JOIN SavingsAccounts sa ON c.PayeeAddress = sa.Owner " +
-                    "WHERE c.PayeeAddress = ?";
-            PreparedStatement statement = conn.prepareStatement(query);
+        String query =
+                "SELECT c.FirstName, c.LastName, c.PayeeAddress, c.Date, " +
+                        "wa.AccountNumber AS WalletAccountNumber, wa.Balance AS WalletBalance, wa.CreationDate AS WalletCreationDate, " +
+                        "sa.AccountNumber AS SavingsAccountNumber, sa.Balance AS SavingsBalance, sa.CreationDate AS SavingsCreationDate " +
+                        "FROM Clients c " +
+                        "LEFT JOIN WalletAccounts wa ON c.PayeeAddress = wa.Owner " +
+                        "LEFT JOIN SavingsAccounts sa ON c.PayeeAddress = sa.Owner " +
+                        "WHERE c.PayeeAddress = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
             statement.setString(1, payeeAddress);
-            ResultSet resultSet = statement.executeQuery();
-            while (resultSet.next()) {
-                String fName = resultSet.getString("FirstName");
-                String lName = resultSet.getString("LastName");
-                String pAddress = resultSet.getString("PayeeAddress");
-                LocalDate date = LocalDate.parse(resultSet.getString("Date"));
-                WalletAccount wallet = new WalletAccount(pAddress, resultSet.getString("WalletAccountNumber"), resultSet.getDouble("WalletBalance"), (int) 1000.0);
-                SavingsAccount savings = new SavingsAccount(pAddress, resultSet.getString("SavingsAccountNumber"), resultSet.getDouble("SavingsBalance"), 500.0);
-                clients.add(new Client(fName, lName, pAddress, wallet, savings, date));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    String fName = resultSet.getString("FirstName");
+                    String lName = resultSet.getString("LastName");
+                    String pAddress = resultSet.getString("PayeeAddress");
+                    LocalDate date = LocalDate.parse(resultSet.getString("Date"));
+
+                    WalletAccount wallet = new WalletAccount(
+                            pAddress,
+                            resultSet.getString("WalletAccountNumber"),
+                            resultSet.getDouble("WalletBalance"),
+                            1000,
+                            resultSet.getString("WalletCreationDate")
+                    );
+                    SavingsAccount savings = new SavingsAccount(
+                            pAddress,
+                            resultSet.getString("SavingsAccountNumber"),
+                            resultSet.getDouble("SavingsBalance"),
+                            500,
+                            resultSet.getString("SavingsCreationDate")
+                    );
+                    clients.add(new Client(fName, lName, pAddress, wallet, savings, date));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return clients;
+    }
+    public void getClientData(String payeeAddress) {
+        String query =
+                "SELECT c.FirstName, c.LastName, c.PayeeAddress, c.Date, " +
+                        "wa.AccountNumber AS WalletAccountNumber, wa.Balance AS WalletBalance, wa.CreationDate AS WalletCreationDate, " +
+                        "sa.AccountNumber AS SavingsAccountNumber, sa.Balance AS SavingsBalance, sa.CreationDate AS SavingsCreationDate " +
+                        "FROM Clients c " +
+                        "LEFT JOIN WalletAccounts wa ON c.PayeeAddress = wa.Owner " +
+                        "LEFT JOIN SavingsAccounts sa ON c.PayeeAddress = sa.Owner " +
+                        "WHERE c.PayeeAddress = ?";
+        try (PreparedStatement statement = conn.prepareStatement(query)) {
+            statement.setString(1, payeeAddress);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    String fName = resultSet.getString("FirstName");
+                    String lName = resultSet.getString("LastName");
+                    String pAddress = resultSet.getString("PayeeAddress");
+                    LocalDate date = LocalDate.parse(resultSet.getString("Date"));
+
+                    WalletAccount wallet = new WalletAccount(
+                            pAddress,
+                            resultSet.getString("WalletAccountNumber"),
+                            resultSet.getDouble("WalletBalance"),
+                            1000,
+                            resultSet.getString("WalletCreationDate")
+                    );
+                    SavingsAccount savings = new SavingsAccount(
+                            pAddress,
+                            resultSet.getString("SavingsAccountNumber"),
+                            resultSet.getDouble("SavingsBalance"),
+                            500,
+                            resultSet.getString("SavingsCreationDate")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

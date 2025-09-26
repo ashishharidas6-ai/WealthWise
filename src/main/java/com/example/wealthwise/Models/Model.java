@@ -15,7 +15,9 @@ public class Model {
     private static Model model;
     private boolean clientLoginSuccessFlag;
     private boolean adminLoginSuccessFlag;
+    private Client loggedInClient;
     private Consumer<Client> clientCreatedListener;
+    private Consumer<Client> clientDeletedListener;
 
     private Model() {
         this.viewFactory = new ViewFactory();
@@ -40,10 +42,11 @@ public class Model {
        DatabaseDriver databaseDriver = getDatabaseDriver();
        try (ResultSet accountData = databaseDriver.getWalletAccount(owner)) {
            if (accountData != null && accountData.next()) {
-               String accNumber = accountData.getString("AccountNumber");
-               double balance = accountData.getDouble("Balance");
-               // Using a default transaction limit
-               return new WalletAccount(owner, accNumber, balance, 1000);
+               String accNumber = accountData.getString("account_number");
+               double balance = accountData.getDouble("balance");
+               int transactionLimit = accountData.getInt("transaction_limit");
+               String dateCreated = accountData.getString("date_created");
+               return new WalletAccount(owner, accNumber, balance, transactionLimit, dateCreated);
            }
        } catch (SQLException e) {
            e.printStackTrace();
@@ -55,10 +58,11 @@ public class Model {
        DatabaseDriver databaseDriver = getDatabaseDriver();
        try (ResultSet accountData = databaseDriver.getSavingsAccount(owner)) {
            if (accountData != null && accountData.next()) {
-               String accNumber = accountData.getString("AccountNumber");
-               double balance = accountData.getDouble("Balance");
-               // Using a default withdrawal limit
-               return new SavingsAccount(owner, accNumber, balance, 500.0);
+               String accNumber = accountData.getString("account_number");
+               double balance = accountData.getDouble("balance");
+               double withdrawalLimit = accountData.getDouble("transaction_limit");
+               String dateCreated = accountData.getString("date_created");
+               return new SavingsAccount(owner, accNumber, balance, withdrawalLimit, dateCreated);
            }
        } catch (SQLException e) {
            e.printStackTrace();
@@ -66,12 +70,15 @@ public class Model {
        return null;
    }
 
-   public boolean deleteClient(String payeeAddress) {
+   public boolean deleteClient(Client client) {
        DatabaseDriver databaseDriver = getDatabaseDriver();
+       String payeeAddress = client.getPayeeAddress();
        try {
            databaseDriver.deleteClient(payeeAddress);
-           databaseDriver.deleteWalletAccount(payeeAddress);
-           databaseDriver.deleteSavingsAccount(payeeAddress);
+           // Notify listener after successful deletion
+           if (clientDeletedListener != null) {
+               clientDeletedListener.accept(client);
+           }
            return true;
        } catch (Exception e) {
            e.printStackTrace();
@@ -101,6 +108,15 @@ public class Model {
        ResultSet resultSet = databaseDriver.getClientsData(payeeAddress, password);
        try {
            clientLoginSuccessFlag = resultSet != null && resultSet.next();
+           if (clientLoginSuccessFlag) {
+               String fName = resultSet.getString("FirstName");
+               String lName = resultSet.getString("LastName");
+               String pAddress = resultSet.getString("PayeeAddress");
+               LocalDate date = LocalDate.parse(resultSet.getString("Date"));
+               WalletAccount wallet = getWalletAccount(pAddress);
+               SavingsAccount savings = getSavingsAccount(pAddress);
+               loggedInClient = new Client(fName, lName, pAddress, wallet, savings, date);
+           }
        } catch (SQLException e) {
            e.printStackTrace();
            clientLoginSuccessFlag = false;
@@ -125,8 +141,16 @@ public class Model {
        return adminLoginSuccessFlag;
    }
 
+   public Client getLoggedInClient() {
+       return loggedInClient;
+   }
+
    public void setClientCreatedListener(Consumer<Client> listener) {
        this.clientCreatedListener = listener;
+   }
+
+   public void setClientDeletedListener(Consumer<Client> listener) {
+       this.clientDeletedListener = listener;
    }
 
    public List<Client> getAllClients() {

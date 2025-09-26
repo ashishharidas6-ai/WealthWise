@@ -6,10 +6,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 public class SavingsAccount extends Account {
     private final DoubleProperty withdrawalLimit;
 
-    public SavingsAccount(String ownerName, String accNumber, double balance, double withdrawalLimit) {
-        super(ownerName, accNumber, balance);
+    public SavingsAccount(String ownerName, String accNumber, double balance, double withdrawalLimit, String dateCreated) {
+        super(ownerName, accNumber, balance, dateCreated);
         this.withdrawalLimit = new SimpleDoubleProperty(this,"withdrawalLimit",withdrawalLimit);
     }
-    public DoubleProperty withdrawalLimit() {return withdrawalLimit;}
+    public DoubleProperty withdrawalLimitProperty() {return withdrawalLimit;}
+    public double getWithdrawalLimit() { return withdrawalLimit.get(); }
 
 }

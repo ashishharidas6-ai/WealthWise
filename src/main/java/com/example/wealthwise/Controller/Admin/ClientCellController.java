@@ -65,7 +65,7 @@ public class ClientCellController implements Initializable {
                 if (client.walletAccountProperty().get() != null &&
                     client.walletAccountProperty().get().accNumberProperty().get() != null) {
                     wallet_acc_number.setText(client.walletAccountProperty().get().accNumberProperty().get());
-                    wallet_balance.setText("$" + String.format("%.2f", client.walletAccountProperty().get().balanceProperty().get()));
+                    wallet_balance.setText("₹" + String.format("%.2f", client.walletAccountProperty().get().balanceProperty().get()));
                 } else {
                     wallet_acc_number.setText("N/A");
                     wallet_balance.setText("N/A");
@@ -75,7 +75,7 @@ public class ClientCellController implements Initializable {
                 if (client.savingsAccountProperty().get() != null &&
                     client.savingsAccountProperty().get().accNumberProperty().get() != null) {
                     sav_acc_number.setText(client.savingsAccountProperty().get().accNumberProperty().get());
-                    sav_balance.setText("$" + String.format("%.2f", client.savingsAccountProperty().get().balanceProperty().get()));
+                    sav_balance.setText("₹" + String.format("%.2f", client.savingsAccountProperty().get().balanceProperty().get()));
                 } else {
                     sav_acc_number.setText("N/A");
                     sav_balance.setText("N/A");
@@ -121,9 +121,17 @@ public class ClientCellController implements Initializable {
         if (client != null) {
             try {
                 String clientName = client.firstNameProperty().get() + " " + client.lastNameProperty().get();
-                String clientEmail = client.payeeAddressProperty().get();
+                String clientPayeeAddress = client.payeeAddressProperty().get();
+                // Assuming id is an Integer type
+                String clientWalletAccountNumber = client.walletAccountProperty().get().accNumberProperty().get();
+                Double clientWalletBalance = client.walletAccountProperty().get().balanceProperty().get();
+                // Add more fields as needed
+                // ...
+                String clientSavingsAccountNumber = client.savingsAccountProperty().get().accNumberProperty().get();
+                Double clientSavingsBalance = client.savingsAccountProperty().get().balanceProperty().get();
+
                 
-                System.out.println("Delete button clicked for client: " + clientName + " (" + clientEmail + ")");
+                System.out.println("Delete button clicked for client: " + clientName + " (" + clientPayeeAddress + ")");
                 
                 // Show confirmation dialog
                 javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.CONFIRMATION);
@@ -132,8 +140,10 @@ public class ClientCellController implements Initializable {
                 alert.setContentText("Are you sure you want to delete this client?\n\n" +
                                    "This will permanently remove:\n" +
                                    "• Client account: " + clientName + "\n" +
-                                   "• Email: " + clientEmail + "\n" +
-                                   "• Wallet account\n" +
+                                   "• PayeeAddress: " + clientPayeeAddress + "\n" +
+                                   "• Wallet account\n" + "• Wallet balance: $" + clientWalletBalance + "\n" +
+                        "• Savings balance: $" + clientSavingsBalance + "\n" +
+                        "• All associated transactions\n" +
                                    "• Savings account\n\n" +
                                    "This action cannot be undone.");
                 
@@ -145,7 +155,7 @@ public class ClientCellController implements Initializable {
                     
                     // Delete client from database
                     com.example.wealthwise.Models.Model model = com.example.wealthwise.Models.Model.getInstance();
-                    boolean deleted = model.deleteClient(clientEmail);
+                    boolean deleted = model.deleteClient(client);
                     
                     if (deleted) {
                         // Show success message

@@ -27,6 +27,7 @@ public class ClientsController implements Initializable {
         initializeClientsList();
         loadAllClients();
         setupClientCreatedListener();
+        setupClientDeletedListener();
         System.out.println("ClientsController: Initialization complete");
     }
     
@@ -86,6 +87,16 @@ public class ClientsController implements Initializable {
                     // Add the new client to the list
                     addClientToList(client);
                 }
+            });
+        });
+    }
+
+    // Set up listener for when clients are deleted
+    private void setupClientDeletedListener() {
+        model.setClientDeletedListener(client -> {
+            // Run on JavaFX Application Thread
+            javafx.application.Platform.runLater(() -> {
+                clientsObservableList.remove(client);
             });
         });
     }
