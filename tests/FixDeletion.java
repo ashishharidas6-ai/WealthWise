@@ -37,7 +37,7 @@ public class FixDeletion {
             System.out.println("  Removing existing database...");
             dbFile.delete();
         }
-        
+
         // Create new database
         System.out.println("  Creating new database...");
         Connection connection = DriverManager.getConnection("jdbc:sqlite:mazebank.db");
@@ -126,7 +126,7 @@ public class FixDeletion {
         System.out.println("  Testing deletion with DatabaseDriver...");
         
         // Create DatabaseDriver instance
-        com.example.wealthwise.Models.DatabaseDriver dbDriver = new com.example.wealthwise.Models.DatabaseDriver();
+        com.smartfinance.Models.DatabaseDriver dbDriver = new com.smartfinance.Models.DatabaseDriver();
         
         // Test deleting John Doe
         String emailToDelete = "@John.Doe";

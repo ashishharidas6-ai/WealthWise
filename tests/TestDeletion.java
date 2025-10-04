@@ -45,7 +45,7 @@ public class TestDeletion {
             System.out.println("\n3. Testing deletion using DatabaseDriver...");
             
             // Create DatabaseDriver instance (this will create a new connection)
-            com.example.wealthwise.Models.DatabaseDriver dbDriver = new com.example.wealthwise.Models.DatabaseDriver();
+            com.smartfinance.Models.DatabaseDriver dbDriver = new com.smartfinance.Models.DatabaseDriver();
             
             // Try to delete John Doe
             String emailToDelete = "@John.Doe";

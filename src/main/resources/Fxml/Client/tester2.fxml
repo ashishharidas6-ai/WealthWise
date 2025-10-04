@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="850.0" styleClass="root" stylesheets="@../../Styles/accounts.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Client.accountController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="650.0" prefWidth="850.0" styleClass="root" stylesheets="@../../Styles/accounts.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartfinance.Controller.Client.accountController">
    <children>
       <VBox layoutX="83.2" layoutY="228.0" prefHeight="500.0" prefWidth="400.0" styleClass="account-list" AnchorPane.leftAnchor="10.0" AnchorPane.topAnchor="10.0">
          <children>

@@ -12,7 +12,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="deposit_container" stylesheets="@../../Styles/deposit.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.Admin.depositController">
+<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="deposit_container" stylesheets="@../../Styles/deposit.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartfinance.Controller.Admin.depositController">
    <children>
       <VBox layoutX="16.0" layoutY="140.0" prefHeight="570.0" prefWidth="820.0" styleClass="search_box" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="100.0">
          <children>

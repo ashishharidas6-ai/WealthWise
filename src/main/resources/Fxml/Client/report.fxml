@@ -6,9 +6,20 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.wealthwise.Controller.Client.reportController"
-            prefHeight="400.0" prefWidth="600.0">
-
+<AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="report_container" stylesheets="@../../Styles/Report.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartfinance.Controller.Client.reportController">
+   <children>
+      <Text layoutX="350.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Financial Reports" />
+      <VBox layoutX="50.0" layoutY="60.0" prefHeight="650.0" prefWidth="750.0" spacing="20.0">
+         <children>
+            <HBox spacing="20.0">
+               <children>
+                  <Button fx:id="transaction_report_btn" mnemonicParsing="false" onAction="#onTransactionReport" prefWidth="200.0" text="Transaction Report" />
+                  <Button fx:id="investment_report_btn" mnemonicParsing="false" onAction="#onInvestmentReport" prefWidth="200.0" text="Investment Report" />
+                  <Button fx:id="balance_report_btn" mnemonicParsing="false" onAction="#onBalanceReport" prefWidth="200.0" text="Balance Summary" />
+               </children>
+            </HBox>
+            <TextArea fx:id="report_textarea" prefHeight="550.0" prefWidth="750.0" wrapText="true" />
+         </children>
+      </VBox>
+   </children>
 </AnchorPane>

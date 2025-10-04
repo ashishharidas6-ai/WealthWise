@@ -1,14 +1,88 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.wealthwise.Controller.Client.profileController"
-            prefHeight="400.0" prefWidth="600.0">
+            fx:controller="com.smartfinance.Controller.Client.profileController"
+            prefHeight="750.0" prefWidth="850.0" styleClass="root" stylesheets="@../../Styles/profile.css">
+   <children>
+       <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="730.0" prefWidth="830.0" styleClass="inner_container"
+                   AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0"
+                   AnchorPane.topAnchor="10.0">
+           <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="title" text="User Profile"
+                 AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0"/>
+           <Label layoutX="20.0" layoutY="75.0" text="View and manage your profile information."
+                  AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="75.0"/>
 
+           <VBox layoutX="50.0" layoutY="120.0" prefHeight="200.0" prefWidth="300.0" spacing="15.0"
+                 AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="120.0">
+              <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="120.0" text="First Name:"/>
+                          <Label fx:id="first_name_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="120.0" text="Last Name:"/>
+                          <Label fx:id="last_name_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="120.0" text="Payee Address:"/>
+                          <Label fx:id="payee_address_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="120.0" text="Registration Date:"/>
+                          <Label fx:id="reg_date_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+              </children>
+           </VBox>
+
+           <VBox layoutX="450.0" layoutY="120.0" prefHeight="200.0" prefWidth="300.0" spacing="15.0"
+                 AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="120.0">
+              <children>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="150.0" text="Wallet Account Number:"/>
+                          <Label fx:id="wallet_acc_num_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="150.0" text="Wallet Balance:"/>
+                          <Label fx:id="wallet_balance_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="150.0" text="Savings Account Number:"/>
+                          <Label fx:id="savings_acc_num_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+                  <HBox alignment="CENTER_LEFT" spacing="10.0">
+                      <children>
+                          <Label prefWidth="150.0" text="Savings Balance:"/>
+                          <Label fx:id="savings_balance_lbl" text="N/A"/>
+                      </children>
+                  </HBox>
+              </children>
+           </VBox>
+
+           <Button fx:id="refresh_btn" layoutX="50.0" layoutY="380.0" prefHeight="30.0" prefWidth="100.0" text="Refresh"
+                   AnchorPane.leftAnchor="50.0" AnchorPane.topAnchor="380.0"/>
+
+           <PieChart fx:id="expenditure_pie_chart" layoutX="215.0" layoutY="430.0" prefHeight="280.0" prefWidth="400.0"
+                     title="Expenditures by Category"/>
+       </AnchorPane>
+   </children>
 </AnchorPane>

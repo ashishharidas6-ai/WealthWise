@@ -10,7 +10,7 @@
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             styleClass="Budget.css"
-            fx:controller="com.example.wealthwise.Controller.Client.BudgetController"
+            fx:controller="com.smartfinance.Controller.Client.BudgetController"
             prefHeight="400.0" prefWidth="600.0">
     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Budget Management" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0" />
     <Label text="Create and manage your budgets here." AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="50.0" />

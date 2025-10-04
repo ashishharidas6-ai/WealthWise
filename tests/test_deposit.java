@@ -1,7 +1,7 @@
 // Simple test to verify deposit functionality
-import com.example.wealthwise.Views.ViewFactory;
-import com.example.wealthwise.Views.AdminMenuOption;
-import com.example.wealthwise.Models.Model;
+import com.smartfinance.Views.ViewFactory;
+import com.smartfinance.Views.AdminMenuOption;
+import com.smartfinance.Models.Model;
 
 public class test_deposit {
     public static void main(String[] args) {

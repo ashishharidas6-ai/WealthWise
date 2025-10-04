@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logincontainer" stylesheets="@../Styles/login.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.wealthwise.Controller.LoginController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="logincontainer" stylesheets="@../Styles/login.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.smartfinance.Controller.LoginController">
     <VBox alignment="CENTER" layoutX="-1.6" minHeight="-Infinity" prefHeight="400.0" prefWidth="202.0" style="-fx-background-color: #8ac7cc;" styleClass="login_logo_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
         <ImageView fitHeight="71.0" fitWidth="71.0" nodeOrientation="INHERIT">
             <image>

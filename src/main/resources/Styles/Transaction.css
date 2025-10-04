@@ -24,4 +24,16 @@
     -fx-pref-width: 800;
 
 }
-
+.transactions_container Button{
+    -fx-background-color: rgb(218, 242, 245);
+    -fx-text-fill: #090909;
+    -fx-font-size: 1.3em;
+    -fx-font-family: "Calibri Light";
+    -fx-font-weight: bold;
+    -fx-font-thickness: 5px;
+    -fx-padding: 5px 10px;
+}
+.transactions_container Button:hover{
+    -fx-background-color: #04a3ac;
+    -fx-text-fill: #FFFFFF;
+}

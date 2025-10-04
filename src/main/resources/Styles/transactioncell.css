@@ -1,6 +1,6 @@
 .cell_container {
     
-    -fx-background-color:liner-gradient(to right, #f9f9f9, #ffffff);
+    -fx-background-color: linear-gradient(to right, #f9f9f9, #ffffff);
     -fx-border-color: #e0e0e0;
     -fx-border-width: 1;
     -fx-border-radius: 5;
@@ -12,7 +12,7 @@
     -fx-background-color: #d1e7dd;
     -fx-border-radius: 50%;
     -fx-background-radius: 50%;
-    -fx-drop-shadow: 2px 2px 5px rgba(0,0,0,0);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.1), 2, 0, 2, 2);
 }
 .trans_date_lbl{
     -fx-font-size: 12;
@@ -33,7 +33,7 @@
     -fx-text-fill: #abdef4;
     -fx-alignment: center;
     -fx-background-color: #151515;
-    -fx-boder-radius: 5;
+    -fx-border-radius: 5;
 
 }
 .trans_category_lbl{

@@ -1,5 +1,5 @@
-import com.example.wealthwise.Models.*;
-import com.example.wealthwise.Controller.Admin.ClientsController;
+import com.smartfinance.Models.*;
+import com.smartfinance.Controller.Admin.ClientsController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;

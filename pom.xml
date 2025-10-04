@@ -18,12 +18,12 @@
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
-      <version>21.0.6</version>
+      <version>24.0.1</version>
     </dependency>
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-fxml</artifactId>
-      <version>21.0.6</version>
+      <version>24.0.1</version>
     </dependency>
 <dependency>
       <groupId>com.dlsc.formsfx</groupId>
@@ -44,7 +44,7 @@
       <dependency>
           <groupId>org.openjfx</groupId>
           <artifactId>javafx-graphics</artifactId>
-          <version>21.0.6</version>
+          <version>24.0.1</version>
       </dependency>
 
 <dependency>
@@ -65,6 +65,16 @@
           <artifactId>sqlite-jdbc</artifactId>
           <version>3.45.2.0</version>
       </dependency>
+      <dependency>
+          <groupId>com.opencsv</groupId>
+          <artifactId>opencsv</artifactId>
+          <version>5.7.1</version>
+      </dependency>
+      <dependency>
+          <groupId>org.json</groupId>
+          <artifactId>json</artifactId>
+          <version>20240303</version>
+      </dependency>
   </dependencies>
 
   <build>
@@ -74,7 +84,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
-          <release>21</release>
+          <release>24</release>
         </configuration>
       </plugin>
       <plugin>
@@ -86,10 +96,7 @@
             <!-- Default configuration for running with: mvn clean javafx:run -->
             <id>default-cli</id>
             <configuration>
-              <mainClass>com.example.wealthwise/com.example.wealthwise.App</mainClass>
-              <launcher>app</launcher>
-              <jlinkZipName>app</jlinkZipName>
-              <jlinkImageName>app</jlinkImageName>
+              <mainClass>com.smartfinance/com.smartfinance.App</mainClass>
               <noManPages>true</noManPages>
               <stripDebug>true</stripDebug>
               <noHeaderFiles>true</noHeaderFiles>

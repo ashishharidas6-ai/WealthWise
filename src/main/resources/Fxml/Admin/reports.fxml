@@ -8,7 +8,7 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.smartfinance.Controller.Client.reportController"
+            fx:controller="com.smartfinance.Controller.Admin.reportAdminController"
             prefHeight="400.0" prefWidth="600.0">
 
 </AnchorPane>
