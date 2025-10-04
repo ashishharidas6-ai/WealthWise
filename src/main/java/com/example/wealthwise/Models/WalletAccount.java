@@ -15,6 +15,7 @@ public class WalletAccount extends Account {
     }
     public IntegerProperty transactionLimitProperty() { return transactionLimit;}
     public int getTransactionLimit() { return transactionLimit.get(); }
+    public String getWalletAccountCreationDate() { return getDateCreated(); }
 
 
 }

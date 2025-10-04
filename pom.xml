@@ -11,9 +11,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-<junit.version>5.12.1</junit.version>
-      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-      <junit.version>5.10.2</junit.version></properties>
+    <junit.version>5.10.2</junit.version>
+  </properties>
 
   <dependencies>
     <dependency>
@@ -41,11 +40,6 @@
           <groupId>de.jensd</groupId>
           <artifactId>fontawesomefx-fontawesome</artifactId>
           <version>4.7.0-9.1.2</version>
-      </dependency>
-      <dependency>
-          <groupId>org.openjfx</groupId>
-          <artifactId>javafx-graphics</artifactId>
-          <version>21.0.6</version>
       </dependency>
       <dependency>
           <groupId>org.openjfx</groupId>
@@ -80,8 +74,7 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.13.0</version>
         <configuration>
-          <source>21</source>
-          <target>21</target>
+          <release>21</release>
         </configuration>
       </plugin>
       <plugin>

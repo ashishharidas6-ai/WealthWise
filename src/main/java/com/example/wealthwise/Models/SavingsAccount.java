@@ -12,5 +12,6 @@ public class SavingsAccount extends Account {
     }
     public DoubleProperty withdrawalLimitProperty() {return withdrawalLimit;}
     public double getWithdrawalLimit() { return withdrawalLimit.get(); }
+    public String getSavingsAccountCreationDate() { return getDateCreated(); }
 
 }

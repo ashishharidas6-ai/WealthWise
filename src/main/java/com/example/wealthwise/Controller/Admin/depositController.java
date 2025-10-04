@@ -1,42 +1,39 @@
 package com.example.wealthwise.Controller.Admin;
 
+import com.example.wealthwise.Models.*;
+import com.example.wealthwise.Views.ClientCellFactory;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import com.example.wealthwise.Models.Model;
-import com.example.wealthwise.Models.DatabaseDriver;
-import com.example.wealthwise.Models.Client;
-import com.example.wealthwise.Views.ClientCellFactory;
 
 import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 public class depositController implements Initializable {
+
     @FXML
-    public TextField search_payee;
+    private TextField search_payee;
+
     @FXML
-    public Button search_btn_payee;
+    private Button search_btn_payee;
+
     @FXML
-    public ListView<Client> payee_list;  // now holds Client objects
+    private ListView<Client> payee_list;
+
     @FXML
-    public TextField amount_deposit;
+    private TextField amount_deposit;
+
     @FXML
-    public Button depositbtn_payee;
+    private Button depositbtn_payee;
 
     private final ObservableList<Client> payeeObservableList = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("DepositController initialized successfully");
-
         payee_list.setItems(payeeObservableList);
         payee_list.setCellFactory(listView -> new ClientCellFactory());
 
@@ -46,46 +43,46 @@ public class depositController implements Initializable {
 
     private void searchPayees() {
         String searchText = search_payee.getText().trim();
+        payeeObservableList.clear();
+
         if (searchText.isEmpty()) {
-            System.out.println("Search text is empty");
+            System.out.println("Please enter a Payee Address to search.");
             return;
         }
 
         DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();
-        payeeObservableList.clear();
 
-        List<Client> clients = new ArrayList<>();
         try (ResultSet resultSet = databaseDriver.searchClient(searchText)) {
             while (resultSet != null && resultSet.next()) {
                 String fName = resultSet.getString("FirstName");
                 String lName = resultSet.getString("LastName");
                 String pAddress = resultSet.getString("PayeeAddress");
-                LocalDate date = LocalDate.parse(resultSet.getString("Date"));
-                com.example.wealthwise.Models.WalletAccount wallet = Model.getInstance().getWalletAccount(pAddress);
-                com.example.wealthwise.Models.SavingsAccount savings = Model.getInstance().getSavingsAccount(pAddress);
-                clients.add(new Client(fName, lName, pAddress, wallet, savings, date));
+
+                WalletAccount wallet = Model.getInstance().getWalletAccount(pAddress);
+                SavingsAccount savings = Model.getInstance().getSavingsAccount(pAddress);
+                Client client = new Client(fName, lName, pAddress, wallet, savings, null);
+
+                payeeObservableList.add(client);
+            }
+
+            if (payeeObservableList.isEmpty()) {
+                System.out.println("No client found for: " + searchText);
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        if (clients.isEmpty()) {
-            System.out.println("No payees found for: " + searchText);
-        } else {
-            payeeObservableList.addAll(clients);
         }
     }
 
     private void depositAmount() {
         Client selectedClient = payee_list.getSelectionModel().getSelectedItem();
         if (selectedClient == null) {
-            System.out.println("No payee selected");
+            System.out.println("Please select a client first.");
             return;
         }
 
         String amountText = amount_deposit.getText().trim();
         if (amountText.isEmpty()) {
-            System.out.println("Amount is empty");
+            System.out.println("Amount field is empty.");
             return;
         }
 
@@ -93,40 +90,30 @@ public class depositController implements Initializable {
         try {
             amount = Double.parseDouble(amountText);
             if (amount <= 0) {
-                System.out.println("Amount must be positive");
+                System.out.println("Amount must be greater than zero.");
                 return;
             }
         } catch (NumberFormatException e) {
-            System.out.println("Invalid amount format");
+            System.out.println("Invalid amount format.");
             return;
         }
 
-        // Get current savings balance from database
         DatabaseDriver databaseDriver = Model.getInstance().getDatabaseDriver();
-        double currentBalance = 0.0;
-        try (ResultSet resultSet = databaseDriver.getSavingsAccount(selectedClient.getPayeeAddress())) {
-            if (resultSet != null && resultSet.next()) {
-                currentBalance = resultSet.getDouble("Balance");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.out.println("Failed to get current balance");
-            return;
-        }
-        double newBalance = currentBalance + amount;
-
-        boolean success = databaseDriver.updateSavingsBalance(selectedClient.getPayeeAddress(), newBalance);
+        boolean success = databaseDriver.depositToSavings(selectedClient.getPayeeAddress(), amount);
 
         if (success) {
-            // Update the client's savings account balance
+            // Update in-memory balance
+            double newBalance = selectedClient.getSavingsAccount().getBalance() + amount;
             selectedClient.getSavingsAccount().setBalance(newBalance);
-            System.out.println("Deposit successful: " + amount + " to " + selectedClient + ". New balance: " + newBalance);
+
+            System.out.println("✅ Deposit successful: " + amount +
+                    " added to " + selectedClient.getPayeeAddress() +
+                    ". New balance: " + newBalance);
+
             amount_deposit.clear();
-            payee_list.getSelectionModel().clearSelection();
-            // Refresh the list to update displayed balances
             payee_list.refresh();
         } else {
-            System.out.println("Deposit failed for: " + selectedClient);
+            System.out.println("❌ Deposit failed for: " + selectedClient.getPayeeAddress());
         }
     }
 }

@@ -40,5 +40,28 @@ public class Transaction {
         return message;
     }
 
+    public String getSender() {
+        return sender.get();
+    }
+
+    public String getReceiver() {
+        return receiver.get();
+    }
+
+    public double getAmount() {
+        return amount.get();
+    }
+
+    public String getCategory() {
+        return category.get();
+    }
+
+    public LocalDate getDate() {
+        return date.get();
+    }
+
+    public String getMessage() {
+        return message.get();
+    }
 
 }

@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 public class accountController implements Initializable {
 
@@ -34,23 +36,35 @@ public class accountController implements Initializable {
         Client client = Model.getInstance().getLoggedInClient();
         if (client != null) {
             // Savings Account
-            if (client.getSavingsAccount() != null) {
-                acc_no.setText(client.getSavingsAccount().getAccNumber());
-                limit_sav.setText("₹" + String.format("%.2f", ((SavingsAccount) client.getSavingsAccount()).getWithdrawalLimit()));
-                date_created.setText(client.getSavingsAccount().getDateCreated());
-                balance_sav.setText("₹" + String.format("%.2f", client.getSavingsAccount().getBalance()));
+            SavingsAccount savings = (SavingsAccount) client.getSavingsAccount();
+            if (savings != null) {
+                acc_no.setText(savings.getAccNumber());
+                limit_sav.setText("₹" + String.format("%.2f", savings.getWithdrawalLimit()));
+                date_created.setText(formatDate(savings.getSavingsAccountCreationDate()));
+                balance_sav.setText("₹" + String.format("%.2f", savings.getBalance()));
             }
 
             // Wallet Account
-            if (client.getWalletAccount() != null) {
-                acc_no_wal.setText(client.getWalletAccount().getAccNumber());
-                limit_wal.setText(String.valueOf(((WalletAccount) client.getWalletAccount()).getTransactionLimit()));
-                date_created_wal.setText(client.getWalletAccount().getDateCreated());
-                balance_wal.setText("₹" + String.format("%.2f", client.getWalletAccount().getBalance()));
+            WalletAccount wallet = (WalletAccount) client.getWalletAccount();
+            if (wallet != null) {
+                acc_no_wal.setText(wallet.getAccNumber());
+                limit_wal.setText("₹" + String.format("%.2f", wallet.getTransactionLimit()));
+                date_created_wal.setText(formatDate(wallet.getWalletAccountCreationDate()));
+                balance_wal.setText("₹" + String.format("%.2f", wallet.getBalance()));
             }
         }
     }
 
-
-
+    private String formatDate(String dateString) {
+        if (dateString == null || dateString.isEmpty()) {
+            return "Unknown";
+        }
+        try {
+            // Assuming the date is stored as yyyy-MM-dd format
+            LocalDate date = LocalDate.parse(dateString);
+            return date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        } catch (Exception e) {
+            return dateString; // Return as-is if parsing fails
+        }
+    }
 }

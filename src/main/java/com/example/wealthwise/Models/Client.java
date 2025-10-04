@@ -1,9 +1,8 @@
 package com.example.wealthwise.Models;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 
@@ -14,6 +13,9 @@ public class Client {
     private final ObjectProperty<Account> walletAcc;
     private final ObjectProperty<Account> savAcc;
     private final ObjectProperty<LocalDate> date;
+
+    // Add transaction history
+    private final ObservableList<Transaction> transactionHistory;
 
     public Client(String fname, String lname, String pAddress, Account walletAcc, Account savAcc, LocalDate date) {
         this.fname = new SimpleStringProperty(this, "First name", fname != null ? fname : "");
@@ -27,11 +29,12 @@ public class Client {
                 savAcc != null ? savAcc : createDefaultAccount("Savings"));
 
         this.date = new SimpleObjectProperty<>(this, "date", date != null ? date : LocalDate.now());
+
+        // Initialize transaction history as empty list
+        this.transactionHistory = FXCollections.observableArrayList();
     }
 
-    // Utility: Create a safe placeholder account
     private Account createDefaultAccount(String type) {
-        // Adjust constructor if Account has different fields
         if ("Wallet".equals(type)) {
             return new WalletAccount("Default", "0", 0.0, 1000, LocalDate.now().toString());
         } else if ("Savings".equals(type)) {
@@ -41,7 +44,6 @@ public class Client {
         }
     }
 
-    // JavaFX Properties (for UI binding)
     public StringProperty firstNameProperty() { return fname; }
     public StringProperty lastNameProperty() { return lname; }
     public StringProperty payeeAddressProperty() { return pAddress; }
@@ -49,7 +51,6 @@ public class Client {
     public ObjectProperty<Account> savingsAccountProperty() { return savAcc; }
     public ObjectProperty<LocalDate> dateProperty() { return date; }
 
-    // Convenience getters (null-safe)
     public String getFirstName() { return fname.get(); }
     public String getLastName() { return lname.get(); }
     public String getPayeeAddress() { return pAddress.get(); }
@@ -57,7 +58,6 @@ public class Client {
     public Account getSavingsAccount() { return savAcc.get(); }
     public LocalDate getDate() { return date.get(); }
 
-    // Null-safe string for debugging & UI
     @Override
     public String toString() {
         String walletStr = (getWalletAccount() != null) ? "Wallet#" + getWalletAccount().getAccNumber() : "No Wallet";
@@ -65,5 +65,25 @@ public class Client {
 
         return String.format("%s %s (%s) [%s | %s]",
                 getFirstName(), getLastName(), getPayeeAddress(), walletStr, savStr);
+    }
+
+    // Transaction history accessor
+    public ObservableList<Transaction> getTransactionHistory() {
+        return transactionHistory;
+    }
+
+    // Convenience method to add a new transaction
+    public void addTransaction(Transaction tx) {
+        if (tx != null) {
+            transactionHistory.add(tx);
+        }
+    }
+
+    // Method to set the entire transaction history
+    public void setTransactionHistory(java.util.List<Transaction> transactions) {
+        transactionHistory.clear();
+        if (transactions != null) {
+            transactionHistory.addAll(transactions);
+        }
     }
 }

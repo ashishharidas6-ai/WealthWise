@@ -43,7 +43,7 @@ public class LoginController implements Initializable {
         // Open client window
        if(Model.getInstance().getViewFactory().getLoginAccountType()==AccountType.CLIENT){
            //evaluation
-           Model.getInstance().evaluateclientCred(payee_address_fld.getText(),password_fld.getText());
+           Model.getInstance().evaluateClientCred(payee_address_fld.getText(),password_fld.getText());
            if(Model.getInstance().getClientLoginSuccessFlag()){
                Model.getInstance().getViewFactory().showClientWindow();
                //close login state
