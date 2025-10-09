@@ -1,0 +1,37 @@
+/* profile.css - Styles for profile.fxml */
+
+.root {
+    -fx-background-color: #ffffff;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.inner_container {
+    -fx-background-color: #8ac7cc;
+    -fx-background-radius: 10 10 10 10;
+    -fx-padding: 20 20 20 20;
+    -fx-effect: dropshadow(three-pass-box, rgba(0, 0, 0, 0.1), 10, 0.1, 0, 2);
+}
+
+.title {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #3b93eb;
+    -fx-padding: 0 0 20px 0;
+}
+
+.label {
+    -fx-text-fill: #333;
+    -fx-font-size: 14px;
+}
+
+.button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-padding: 8 16 8 16;
+    -fx-background-radius: 4;
+}
+
+.button:hover {
+    -fx-background-color: #388e3c;
+}

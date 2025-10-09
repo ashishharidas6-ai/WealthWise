@@ -1,0 +1,88 @@
+{
+    "checksum": "e4f7509a758540c71cb351d7b8b58df2d3fd317ce6796600f60642e402dcc518",
+    "data": {
+    "id": "e6f6f3e7-6503-48d5-a2e8-6bb5960cc84f",
+    "createdAt": 1759942967160,
+    "updatedAt": 1759942995676,
+    "title": "avoid the investing feature just show the recom...",
+    "messages": [
+        {
+            "id": "d3922ab5-d270-4281-a1d1-0dfa94dbece8",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "avoid the investing feature just show the recomendation"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/smartfinance/Controller/Client/InvestmentController.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise final old/src/main/java/com/smartfinance/Controller/Client/InvestmentController.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "package com.smartfinance.Controller.Client;\n\nimport com.smartfinance.Models.*;\nimport com.smartfinance.service.InvestmentService;\nimport javafx.collections.FXCollections;\nimport javafx.collections.ObservableList;\nimport javafx.fxml.FXML;\nimport javafx.fxml.Initializable;\nimport javafx.scene.chart.LineChart;\nimport javafx.scene.chart.NumberAxis;\nimport javafx.scene.chart.XYChart;\nimport javafx.scene.control.*;\nimport javafx.scene.layout.VBox;\nimport javafx.scene.text.Text;\n\nimport java.net.URL;\nimport java.sql.ResultSet;\nimport java.sql.SQLException;\nimport java.util.Arrays;\nimport java.util.List;\nimport java.util.ResourceBundle;\n\npublic class InvestmentController implements Initializable {\n\n    @FXML\n    private ChoiceBox<String> investment_type_choicebox;\n    @FXML\n    private TextField investment_amount_field;\n    @FXML\n    private Button add_investment_btn;\n    @FXML\n    private ListView<String> investments_listview;\n    @FXML\n    private VBox recommendations_container;\n\n    private ObservableList<String> investmentsList = FXCollections.observableArrayList();\n    private InvestmentService investmentService;\n\n    @Override\n    public void initialize(URL location, ResourceBundle resources) {\n        investmentService = new InvestmentService();\n\n        // ✅ Populate investment types safely\n        investment_type_choicebox.getItems().addAll(\n                Arrays.stream(RiskProfile.values())\n                        .map(Enum::name)\n                        .toList()\n        );\n\n        if (!investment_type_choicebox.getItems().isEmpty()) {\n            investment_type_choicebox.setValue(investment_type_choicebox.getItems().get(0));\n        }\n\n        // ✅ Set up list view\n        investments_listview.setItems(investmentsList);\n\n        // ✅ Load data\n        loadInvestments();\n        loadRecommendations();\n    }\n\n    private void loadInvestments() {\n        investmentsList.clear();\n        Model model = Model.getInstance();\n        Client client = model.getLoggedInClient();\n        if (client == null) return;\n\n        String owner = client.getPayeeAddress(); // Ensure correct field\n\n        try (ResultSet rs = model.getDatabaseDriver().getInvestments(owner)) {\n            while (rs != null && rs.next()) {\n                Investment investment = new Investment(\n                        rs.getInt(\"ID\"),\n                        rs.getString(\"Owner\"),\n                        rs.getString(\"InvestmentType\"),\n                        rs.getDouble(\"AmountInvested\"),\n                        rs.getDouble(\"CurrentValue\"),\n                        rs.getString(\"DateInvested\")\n                );\n                String display = String.format(\n                        \"%s - Invested: $%.2f, Current: $%.2f, P/L: $%.2f (%.2f%%)\",\n                        investment.getInvestmentType(),\n                        investment.getAmountInvested(),\n                        investment.getCurrentValue(),\n                        investment.getProfitLoss(),\n                        investment.getProfitLossPercentage()\n                );\n                investmentsList.add(display);\n            }\n        } catch (SQLException e) {\n            e.printStackTrace();\n        }\n    }\n\n    private void loadRecommendations() {\n        recommendations_container.getChildren().clear();\n        List<String> suggestions = investmentService.getStockSuggestions();\n        for (String symbol : suggestions) {\n            recommendations_container.getChildren().add(createStockContainer(symbol));\n        }\n    }\n\n    private VBox createStockContainer(String symbol) {\n        VBox container = new VBox(8);\n        container.setStyle(\"\"\"\n            -fx-background-color: #f8f9fa;\n            -fx-padding: 15;\n            -fx-background-radius: 8;\n            -fx-border-color: #e9ecef;\n            -fx-border-radius: 8;\n            -fx-border-width: 1;\n        \"\"\");\n\n        Text symbolText = new Text(symbol);\n        symbolText.setStyle(\"-fx-font-size: 16px; -fx-font-weight: bold; -fx-fill: #2c3e50;\");\n\n        Text descText = new Text(\"Recommended based on your risk profile\");\n        descText.setStyle(\"-fx-font-size: 12px; -fx-fill: #6c757d;\");\n\n        NumberAxis xAxis = new NumberAxis();\n        NumberAxis yAxis = new NumberAxis();\n        xAxis.setVisible(false);\n        yAxis.setVisible(false);\n\n        LineChart<Number, Number> chart = new LineChart<>(xAxis, yAxis);\n        chart.setPrefWidth(300);\n        chart.setPrefHeight(120);\n        chart.setLegendVisible(false);\n        chart.setCreateSymbols(false);\n        chart.setAnimated(false);\n        chart.setStyle(\"-fx-background-color: transparent;\");\n\n        XYChart.Series<Number, Number> series = new XYChart.Series<>();\n        List<Double> prices = investmentService.getHistoricalPrices(symbol, \"1M\");\n\n        if (!prices.isEmpty()) {\n            double minPrice = prices.stream().min(Double::compare).orElse(0.0);\n            double maxPrice = prices.stream().max(Double::compare).orElse(100.0);\n            yAxis.setLowerBound(minPrice * 0.95);\n            yAxis.setUpperBound(maxPrice * 1.05);\n        }\n\n        for (int i = 0; i < prices.size(); i++) {\n            series.getData().add(new XYChart.Data<>(i, prices.get(i)));\n        }\n\n        chart.getData().add(series);\n        container.getChildren().addAll(symbolText, descText, chart);\n\n        return container;\n    }\n\n    @FXML\n    private void onAddInvestment() {\n        String type = investment_type_choicebox.getValue();\n        String amountText = investment_amount_field.getText();\n\n        if (type == null || type.isEmpty()) {\n            System.out.println(\"Please select an investment type.\");\n            return;\n        }\n\n        try {\n            double amount = Double.parseDouble(amountText);\n            if (amount <= 0) {\n                System.out.println(\"Investment amount must be positive.\");\n                return;\n            }\n\n            Model model = Model.getInstance();\n            Client client = model.getLoggedInClient();\n            if (client == null) return;\n\n            String owner = client.getPayeeAddress();\n\n            model.getDatabaseDriver().createInvestment(owner, type, amount, amount);\n\n            investment_amount_field.clear();\n            loadInvestments();\n\n            System.out.println(\"Investment added successfully!\");\n\n        } catch (NumberFormatException e) {\n            System.out.println(\"Please enter a valid amount.\");\n        }\n    }\n}\n",
+                    "language": "java"
+                },
+                "codebaseEnabled": true,
+                "usedRules": [
+                    "zen-rules://user/custom"
+                ]
+            },
+            "createdAt": 1759942967168,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "avoid the investing feature just show the recomendation  "
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": [
+                {
+                    "name": "User AI Instruction",
+                    "description": "User AI Instruction",
+                    "uri": "zen-rules://user/custom",
+                    "content": "✅ Full Tech Stack for Your Smart Personal Finance & Investment Manager\nArea\tTechnologies\tPurpose\nCore Language\tJava 17+\tMain development\nUI\tJavaFX\tDesktop GUI\nData Storage\tSQLite (local), MySQL/PostgreSQL (cloud/web)\tPersist transactions, user data\nBuild Tool\tMaven or Gradle\tDependency management\nCharting\tJavaFX Charts or JFreeChart\tDashboard visualization\nAPI Calls\tJava HttpClient, Retrofit (optional)\tFetch stock/ETF data\nMachine Learning\tWeka or custom Java logic\tRisk profile analyzer\nPDF/CSV Export\tApache PDFBox / iText (PDF), OpenCSV\tFinancial report export\nAuthentication\tCustom login system (hashed passwords, Java Crypto), or Firebase/Auth0 (web version)\tSecure login\nNotifications\tJavaFX Alert, desktop notifications (java.awt.SystemTray)\tBudget/investment alerts\nScheduling\tScheduledExecutorService, Quartz Scheduler\tAuto data refresh, alerts\nOptional Web Version\tSpring Boot + Thymeleaf (or REST + React)\tIf you want to turn this into a web app later\n\n✅ Mapping Features to Technologies\n 1. User Authentication\nFeature\tTools\nSecure login/signup\tJavaFX form + hashed passwords (e.g., SHA-256 with salt)\nSession management\tStore current user ID/session info in memory or DB\n\n 2. Add/Edit/Delete Transactions\nFeature\tTools\nForm UI\tJavaFX\nStorage\tSQLite / MySQL\nDate input\tJavaFX DatePicker\n\n 3. Categorize Transactions\nFeature\tTools\nManual\tDropdown in JavaFX\nAuto\tKeyword mapping logic in Java\n\n 4. Dashboard with Charts\nFeature\tTools\nMonthly Spending / Income vs Expenses\tJavaFX LineChart / BarChart / PieChart\nSavings Growth\tLineChart with time series data\n\n 5. Budget Setup & Alerts\nFeature\tTools\nBudget input\tJavaFX input fields\nAlerts\tJavaFX Alert or tray popup using SystemTray\nAuto-check\tScheduledExecutorService to compare actual vs. budget regularly\n\n 6. Recurring Expense Handling\nFeature\tTools\nPattern recognition\tJava logic: group transactions by name/date interval\nAuto-categorization\tIdentify frequency (e.g., same vendor every 30 days)\n\n 7. Export to CSV / PDF\nFeature\tTools\nCSV\tOpenCSV\nPDF\tiText or Apache PDFBox\n\n Investment Features\n 1. AI-Based Risk Profile Analyzer\nFeature\tTools\nRisk quiz\tJavaFX form\nAnalysis\tJava logic or Weka ML model\nResult categories\tConservative, Moderate, Aggressive\n\n Store results for future recommendations.\n\n 2. Safe Stocks & ETF Recommender\nFeature\tTools\nData\tFinnhub API / Alpha Vantage\nFetching\tJava HttpClient, JSON parsing\nLogic\tFilter by market cap, beta, volume, dividend\nUI\tListView or CardView in JavaFX showing suggestions with short descriptions\n\n 3. Auto-Invest Planner\nFeature\tTools\nSurplus calculation\tTotal Income - Total Expense\nSuggestions\tRule-based logic based on risk profile\nUI\tMonthly suggestion popups or sidebar panel\n\n 4. \"Learn While You Invest\"\nFeature\tTools\nTips data\tJSON file or embedded DB table\nDisplay\tTooltips in JavaFX, or context-aware popups\n\n 5. Smart Alerts for Investment Opportunities\nFeature\tTools\nPolling\tScheduledExecutorService fetches API data\nConditions\te.g., \"Stock X dropped 5%\"\nAlerts\tJavaFX or SystemTray popup\nStorage\tSave alert history in SQLite\n\n Folder Structure Example\npgsql\nCopy\nEdit\ncom.smartfinance\n├── Main.java\n├── auth\n│   ├── LoginController.java\n│   └── RegisterController.java\n├── dashboard\n│   ├── DashboardController.java\n│   └── ChartUtils.java\n├── model\n│   ├── User.java\n│   ├── Transaction.java\n│   └── RiskProfile.java\n├── service\n│   ├── TransactionService.java\n│   ├── InvestmentService.java\n│   ├── RiskAnalyzer.java\n│   └── APIClient.java\n├── util\n│   ├── DatabaseHelper.java\n│   ├── CSVExporter.java\n│   └── PDFGenerator.java\n├── view\n│   ├── login.fxml\n│   ├── dashboard.fxml\n│   └── charts.fxml\n└── resources\n    ├── tips.json\n    └── application.properties\n Suggested Roadmap to Build\nPhase 1: Core Personal Finance\n User Auth (Login/Register)\n\n Add/Edit/Delete Transactions\n\n Categorize & Store Transactions\n\n Dashboard Charts\n\n Budget Setup & Alerts\n\nPhase 2: Advanced Automation\n Recurring Expense Detection\n\n Export to PDF/CSV\n\n Notifications via tray or in-app\n\nPhase 3: Investment Module\n Risk Profiler\n\n Safe Stock Recommender\n\n Auto-Invest Planner\n\n Investment Education Tips\n\n Real-time Alerts\n\n Tools & Libraries Summary\nArea\tTool\nUI\tJavaFX\nCharts\tJavaFX, JFreeChart\nData Storage\tSQLite, H2 (dev), MySQL (prod)\nAPI\tFinnhub, Alpha Vantage\nJSON\torg.json, Jackson, or Gson\nScheduling\tScheduledExecutorService\nCSV\tOpenCSV\nPDF\tiText, Apache PDFBox\nML\tWeka (risk analysis)\nAuthentication\tJava MessageDigest or bcrypt (JBCrypt)\nLogging\tSLF4J + Logback (make sure that these features are perfectly working)",
+                    "alwaysApply": true
+                }
+            ]
+        },
+        {
+            "id": "8055903e-2def-48b7-b071-ab2c7bf60782",
+            "role": "system",
+            "content": [
+                {
+                    "type": "errorText",
+                    "text": "Could not establish websocket connection. Please try again later.",
+                    "actions": [
+                        {
+                            "type": "externalAction",
+                            "title": "Regenerate",
+                            "action": "regenerateLastAnswer"
+                        }
+                    ]
+                }
+            ],
+            "createdAt": 1759942995676,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default"
+}
+}

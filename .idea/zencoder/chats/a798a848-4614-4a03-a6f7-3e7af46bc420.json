@@ -1,0 +1,77 @@
+{
+    "checksum": "f7c65f902d9b74dce0469ef51e06c5a6caad57c0b77fae63551812caa2086ff3",
+    "data": {
+    "id": "a798a848-4614-4a03-a6f7-3e7af46bc420",
+    "createdAt": 1759550594829,
+    "updatedAt": 1759551319008,
+    "title": "Account Number Format Guidelines",
+    "messages": [
+        {
+            "id": "3746be91-f791-471d-9690-b00af41f921a",
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "no account nuber must in for of 3021(fixed) -0000 and next account number must be 3021(fixed)-0001 and Wallet account and Savings accont must have same account number"
+                }
+            ],
+            "context": {
+                "currentFile": {
+                    "path": "src/main/java/com/example/wealthwise/Models/Model.java",
+                    "fsPath": "C:/Users/ashis/OneDrive/Desktop/New folder/wealthwise final old/src/main/java/com/example/wealthwise/Models/Model.java",
+                    "sources": [
+                        "opened_tab"
+                    ],
+                    "content": "package com.example.wealthwise.Models;\n\nimport com.example.wealthwise.Views.ViewFactory;\n\nimport java.sql.ResultSet;\nimport java.sql.SQLException;\nimport java.time.LocalDate;\nimport java.util.ArrayList;\nimport java.util.List;\nimport java.util.function.Consumer;\n\npublic class Model {\n    private final ViewFactory viewFactory;\n    private final DatabaseDriver databaseDriver;\n    private static Model model;\n    private boolean clientLoginSuccessFlag;\n    private boolean adminLoginSuccessFlag;\n    private Client loggedInClient;\n    private Consumer<Client> clientCreatedListener;\n    private Consumer<Client> clientDeletedListener;\n\n    private Model() {\n        this.viewFactory = new ViewFactory();\n        this.databaseDriver = new DatabaseDriver();\n    }\n\n    public static synchronized Model getInstance() {\n        if (model == null) {\n            model = new Model();\n        }\n        return model;\n    }\n\n    public ViewFactory getViewFactory() {\n        return viewFactory;\n    }\n\n    public DatabaseDriver getDatabaseDriver() {\n        return databaseDriver;\n    }\n   public WalletAccount getWalletAccount(String owner) {\n       DatabaseDriver databaseDriver = getDatabaseDriver();\n       try (ResultSet accountData = databaseDriver.getWalletAccount(owner)) {\n           if (accountData != null && accountData.next()) {\n               String accNumber = accountData.getString(\"account_number\");\n               double balance = accountData.getDouble(\"balance\");\n               int transactionLimit = accountData.getInt(\"transaction_limit\");\n               String dateCreated = accountData.getString(\"date_created\");\n               return new WalletAccount(owner, accNumber, balance, transactionLimit, dateCreated);\n           }\n       } catch (SQLException e) {\n           e.printStackTrace();\n       }\n       return null;\n   }\n\n   public SavingsAccount getSavingsAccount(String owner) {\n       DatabaseDriver databaseDriver = getDatabaseDriver();\n       try (ResultSet accountData = databaseDriver.getSavingsAccount(owner)) {\n           if (accountData != null && accountData.next()) {\n               String accNumber = accountData.getString(\"account_number\");\n               double balance = accountData.getDouble(\"balance\");\n               double withdrawalLimit = accountData.getDouble(\"transaction_limit\");\n               String dateCreated = accountData.getString(\"date_created\");\n               return new SavingsAccount(owner, accNumber, balance, withdrawalLimit, dateCreated);\n           }\n       } catch (SQLException e) {\n           e.printStackTrace();\n       }\n       return null;\n   }\n\n   public boolean deleteClient(Client client) {\n       DatabaseDriver databaseDriver = getDatabaseDriver();\n       String payeeAddress = client.getPayeeAddress();\n       try {\n           boolean deleted = databaseDriver.deleteClient(payeeAddress);\n           if (deleted) {\n               // Notify listener after successful deletion\n               if (clientDeletedListener != null) {\n                   clientDeletedListener.accept(client);\n               }\n           }\n           return deleted;\n       } catch (Exception e) {\n           e.printStackTrace();\n           return false;\n       }\n   }\n\n   public void createNewClient(String firstName, String lastName, String payeeAddress, String password) {\n       LocalDate date = LocalDate.now();\n       databaseDriver.createClient(firstName, lastName, payeeAddress, password, date);\n       // Generate the same account number for both wallet and savings\n       String accNum = databaseDriver.getNextAccountNumber();\n       // Create wallet account\n       databaseDriver.createWalletAccount(payeeAddress, accNum, 0.0, date);\n       // Create savings account\n       databaseDriver.createSavingsAccount(payeeAddress, accNum, 0.0, date);\n       // Notify listener\n       if (clientCreatedListener != null) {\n           WalletAccount wallet = getWalletAccount(payeeAddress);\n           SavingsAccount savings = getSavingsAccount(payeeAddress);\n           Client newClient = new Client(firstName, lastName, payeeAddress, wallet, savings, date);\n           clientCreatedListener.accept(newClient);\n       }\n   }\n\n   public void evaluateclientCred(String payeeAddress, String password) {\n       ResultSet resultSet = databaseDriver.getClientsData(payeeAddress, password);\n       try {\n           clientLoginSuccessFlag = resultSet != null && resultSet.next();\n           if (clientLoginSuccessFlag) {\n               String fName = resultSet.getString(\"FirstName\");\n               String lName = resultSet.getString(\"LastName\");\n               String pAddress = resultSet.getString(\"PayeeAddress\");\n               LocalDate date = LocalDate.parse(resultSet.getString(\"Date\"));\n               WalletAccount wallet = getWalletAccount(pAddress);\n               SavingsAccount savings = getSavingsAccount(pAddress);\n               loggedInClient = new Client(fName, lName, pAddress, wallet, savings, date);\n           }\n       } catch (SQLException e) {\n           e.printStackTrace();\n           clientLoginSuccessFlag = false;\n       }\n   }\n\n   public void evaluateAdminCred(String username, String password) {\n       ResultSet resultSet = databaseDriver.getAdminData(username, password);\n       try {\n           adminLoginSuccessFlag = resultSet != null && resultSet.next();\n       } catch (SQLException e) {\n           e.printStackTrace();\n           adminLoginSuccessFlag = false;\n       }\n   }\n\n   public boolean getClientLoginSuccessFlag() {\n       return clientLoginSuccessFlag;\n   }\n\n   public boolean getAdminLoginSuccessFlag() {\n       return adminLoginSuccessFlag;\n   }\n\n   public Client getLoggedInClient() {\n       return loggedInClient;\n   }\n\n   public void setClientCreatedListener(Consumer<Client> listener) {\n       this.clientCreatedListener = listener;\n   }\n\n   public void setClientDeletedListener(Consumer<Client> listener) {\n       this.clientDeletedListener = listener;\n   }\n\n   public List<Client> getAllClients() {\n       List<Client> clients = new ArrayList<>();\n       try (ResultSet resultSet = databaseDriver.getAllClientsData()) {\n           while (resultSet != null && resultSet.next()) {\n               String fName = resultSet.getString(\"FirstName\");\n               String lName = resultSet.getString(\"LastName\");\n               String pAddress = resultSet.getString(\"PayeeAddress\");\n               LocalDate date = LocalDate.parse(resultSet.getString(\"Date\"));\n               WalletAccount wallet = getWalletAccount(pAddress);\n               SavingsAccount savings = getSavingsAccount(pAddress);\n               clients.add(new Client(fName, lName, pAddress, wallet, savings, date));\n           }\n       } catch (SQLException e) {\n           e.printStackTrace();\n       }\n       return clients;\n   }\n\n   public boolean clientExists(String payeeAddress) {\n       try (ResultSet resultSet = databaseDriver.searchClient(payeeAddress)) {\n           return resultSet != null && resultSet.next();\n       } catch (SQLException e) {\n           e.printStackTrace();\n           return false;\n       }\n   }\n\n   public boolean transferMoney(String senderAddress, String receiverAddress, double amount, String message) {\n       DatabaseDriver db = getDatabaseDriver();\n       try {\n           // Start transaction\n           db.getConnection().setAutoCommit(false);\n\n           // Check sender balance\n           ResultSet senderWallet = db.getWalletAccount(senderAddress);\n           if (senderWallet == null || !senderWallet.next()) {\n               return false;\n           }\n           double senderBalance = senderWallet.getDouble(\"Balance\");\n           if (senderBalance < amount) {\n               return false;\n           }\n\n           // Update sender balance\n           db.updateWalletBalance(senderAddress, senderBalance - amount);\n\n           // Update receiver balance\n           ResultSet receiverWallet = db.getWalletAccount(receiverAddress);\n           double receiverBalance = 0.0;\n           if (receiverWallet != null && receiverWallet.next()) {\n               receiverBalance = receiverWallet.getDouble(\"Balance\");\n           }\n           db.updateWalletBalance(receiverAddress, receiverBalance + amount);\n\n           // Create transaction record\n           db.createTransaction(senderAddress, receiverAddress, amount, message);\n\n           // Commit transaction\n           db.getConnection().commit();\n\n           return true;\n       } catch (SQLException e) {\n           try {\n               db.getConnection().rollback();\n           } catch (SQLException ex) {\n               ex.printStackTrace();\n           }\n           e.printStackTrace();\n           return false;\n       } finally {\n           try {\n               db.getConnection().setAutoCommit(true);\n           } catch (SQLException e) {\n               e.printStackTrace();\n           }\n       }\n   }\n\n   public void refreshClientData() {\n       if (loggedInClient != null) {\n           loggedInClient.walletAccountProperty().set(getWalletAccount(loggedInClient.getPayeeAddress()));\n           loggedInClient.savingsAccountProperty().set(getSavingsAccount(loggedInClient.getPayeeAddress()));\n       }\n   }\n}\n// ... existing code ...",
+                    "language": "java"
+                },
+                "codebaseEnabled": true
+            },
+            "createdAt": 1759551315609,
+            "isInternal": false,
+            "rawContent": {
+                "type": "doc",
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": "no account nuber must in for of 3021(fixed) -0000 and next account number must be 3021(fixed)-0001 and Wallet account and Savings accont must have same account number"
+                            }
+                        ]
+                    }
+                ]
+            },
+            "autoAppliedRules": []
+        },
+        {
+            "id": "63dfeaf0-4fe2-4856-acd0-d0027b03c42d",
+            "role": "assistant",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Credit balance is too low"
+                }
+            ],
+            "context": {
+                "author": "Code agent (Claude Code)",
+                "operationId": "d047d911-1cfb-47bd-b651-6454cd65818d",
+                "cliSessionId": "a5d00ab8-4b50-44f2-9b81-ec586fa7b719"
+            },
+            "createdAt": 1759551319008,
+            "isInternal": false
+        }
+    ],
+    "isAgent": true,
+    "isNameGenerated": true,
+    "isCustomAgent": false,
+    "isUnitTestsAgent": false,
+    "isE2EAgent": false,
+    "isWebDevAgent": false,
+    "isQnaAgent": false,
+    "isRepoInfoAgent": false,
+    "model": "default",
+    "agentsRuntime": "claude-code"
+}
+}
